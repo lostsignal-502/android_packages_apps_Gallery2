@@ -43,6 +43,8 @@ public class PhotoPageBottomControls implements OnClickListener {
 
     private Delegate mDelegate;
     private ViewGroup mParentLayout;
+    private Context mContext;
+    private int mBaseBottomMargin;
     private ViewGroup mContainer;
 
     private boolean mContainerVisible = false;
@@ -64,12 +66,15 @@ public class PhotoPageBottomControls implements OnClickListener {
     public PhotoPageBottomControls(Delegate delegate, Context context, RelativeLayout layout) {
         mDelegate = delegate;
         mParentLayout = layout;
+        mContext = context;
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContainer = (ViewGroup) inflater
                 .inflate(R.layout.photopage_bottom_controls, mParentLayout, false);
         mParentLayout.addView(mContainer);
+        mBaseBottomMargin =
+                ((ViewGroup.MarginLayoutParams) mContainer.getLayoutParams()).bottomMargin;
         for (int i = mContainer.getChildCount() - 1; i >= 0; i--) {
             View child = mContainer.getChildAt(i);
             child.setOnClickListener(this);
@@ -111,6 +116,12 @@ public class PhotoPageBottomControls implements OnClickListener {
         }
         if (!mContainerVisible) {
             return;
+        }
+        if (mContext instanceof AbstractGalleryActivity) {
+            ViewGroup.MarginLayoutParams lp =
+                    (ViewGroup.MarginLayoutParams) mContainer.getLayoutParams();
+            lp.bottomMargin = mBaseBottomMargin
+                    + ((AbstractGalleryActivity) mContext).getNavigationBarInset();
         }
         for (View control : mControlsVisible.keySet()) {
             Boolean prevVisibility = mControlsVisible.get(control);

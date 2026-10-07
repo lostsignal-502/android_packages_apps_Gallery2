@@ -147,6 +147,14 @@ public class SlotView extends GLView {
         isFromPhotoPage = flag;
     }
 
+    public void setContentBottomInset(int inset) {
+        if (mLayout.mBottomInset == inset) return;
+        mLayout.mBottomInset = inset;
+        if (mScrollY > mLayout.getScrollLimit()) {
+            setScrollPosition(mLayout.getScrollLimit());
+        }
+    }
+
     public void setScrollPosition(int position) {
         position = Utils.clamp(position, 0, mLayout.getScrollLimit());
         mScroller.setPosition(position);
@@ -390,6 +398,7 @@ public class SlotView extends GLView {
 
         private int mUnitCount;
         private int mContentLength;
+        private int mBottomInset;
         private int mScrollPosition;
 
         private IntegerAnimation mVerticalPadding = new IntegerAnimation();
@@ -618,7 +627,8 @@ public class SlotView extends GLView {
         }
 
         public int getScrollLimit() {
-            int limit = WIDE ? mContentLength - mWidth : mContentLength - mHeight;
+            int limit = WIDE ? mContentLength - mWidth
+                    : mContentLength + mBottomInset - mHeight;
             return limit <= 0 ? 0 : limit;
         }
 

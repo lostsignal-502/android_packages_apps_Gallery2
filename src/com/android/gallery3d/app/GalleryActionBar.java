@@ -28,11 +28,14 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowInsetsController;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toolbar;
@@ -453,13 +456,40 @@ public class GalleryActionBar {
 
     public void setBackGroundTransparent() {
         mActionBar.setBackgroundDrawable(
-                new ColorDrawable(mContext.getResources().getColor(R.color.photo_page_action_bar)));
+                mContext.getDrawable(R.drawable.lunaris_photo_toolbar_scrim));
+        applyChrome(true);
     }
 
     public void setBackGroundDefault()
     {
         mActionBar.setBackgroundDrawable(new ColorDrawable(
                 mContext.getResources().getColor(R.color.primary)));
+        applyChrome(false);
+    }
+
+    private void applyChrome(boolean overPhoto) {
+        final int tint = overPhoto ? Color.WHITE
+                : mContext.getColor(R.color.lunaris_on_surface);
+        final Toolbar toolbar = mActivity.getToolbar();
+        if (toolbar != null) {
+            toolbar.setTitleTextColor(tint);
+            toolbar.setSubtitleTextColor(tint);
+            final Drawable overflow = mContext.getDrawable(R.drawable.more).mutate();
+            overflow.setTint(tint);
+            toolbar.setOverflowIcon(overflow);
+        }
+        final Drawable up = mContext.getDrawable(R.drawable.back).mutate();
+        up.setTint(tint);
+        mActionBar.setHomeAsUpIndicator(up);
+
+        final Window window = ((Activity) mActivity).getWindow();
+        window.setStatusBarColor(overPhoto ? Color.BLACK
+                : mContext.getColor(R.color.lunaris_surface_container));
+        if (mContext.getResources().getBoolean(R.bool.lunaris_light_bars)) {
+            final int light = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                    | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+            window.getInsetsController().setSystemBarsAppearance(overPhoto ? 0 : light, light);
+        }
     }
 
 

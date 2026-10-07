@@ -2,42 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/photopage_bottom_controls"
     android:theme="@android:style/Theme.DeviceDefault"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/lunaris_photo_controls_height"
     android:layout_alignParentBottom="true"
-    android:layout_gravity="bottom"
-    android:background="@color/photo_page_bottom_panel"
-    android:gravity="bottom"
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="@dimen/lunaris_pill_margin"
+    android:background="@drawable/lunaris_photo_controls_bg"
+    android:elevation="6dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal"
+    android:padding="@dimen/lunaris_pill_padding"
     android:visibility="gone" >
 
     <ImageButton
         android:id="@+id/photopage_bottom_control_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:background="?android:attr/actionBarItemBackground"
+        style="@style/Lunaris.PhotoControl"
+        android:contentDescription="@string/edit"
         android:src="@drawable/edit"
         android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/photopage_bottom_control_share"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:background="?android:attr/actionBarItemBackground"
+        style="@style/Lunaris.PhotoControl"
+        android:contentDescription="@string/share"
         android:src="@drawable/share"
         android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/photopage_bottom_control_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:background="?android:attr/actionBarItemBackground"
+        style="@style/Lunaris.PhotoControl"
+        android:contentDescription="@string/delete"
         android:src="@drawable/delete"
         android:visibility="gone" />
 

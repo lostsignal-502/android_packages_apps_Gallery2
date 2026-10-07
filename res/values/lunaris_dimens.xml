@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 Lunaris-AOSP
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <dimen name="lunaris_pill_radius">32dp</dimen>
+    <dimen name="lunaris_pill_height">68dp</dimen>
+    <dimen name="lunaris_pill_padding">6dp</dimen>
+    <dimen name="lunaris_pill_margin">16dp</dimen>
+    <dimen name="lunaris_pill_item_width">88dp</dimen>
+    <dimen name="lunaris_pill_label_size">13sp</dimen>
+    <dimen name="lunaris_photo_controls_height">60dp</dimen>
+    <dimen name="lunaris_photo_controls_item_width">72dp</dimen>
+</resources>

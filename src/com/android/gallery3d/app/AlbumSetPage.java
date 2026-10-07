@@ -178,6 +178,7 @@ public class AlbumSetPage extends ActivityState implements
                 mAlbumSetView.setHighlightItemPath(null);
             }
 
+            mSlotView.setContentBottomInset(mActivity.getContentBottomInset());
             mSlotView.layout(slotViewLeft, slotViewTop, slotViewRight, slotViewBottom);
         }
 

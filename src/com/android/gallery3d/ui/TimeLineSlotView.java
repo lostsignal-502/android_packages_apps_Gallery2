@@ -134,6 +134,14 @@ public class TimeLineSlotView extends GLView {
         isFromPhotoPage = flag;
     }
 
+    public void setContentBottomInset(int inset) {
+        if (mLayout.mBottomInset == inset) return;
+        mLayout.mBottomInset = inset;
+        if (mScrollY > mLayout.getScrollLimit()) {
+            setScrollPosition(mLayout.getScrollLimit());
+        }
+    }
+
     public void setScrollPosition(int position) {
         position = Utils.clamp(position, 0, mLayout.getScrollLimit());
         mScroller.setPosition(position);
@@ -475,6 +483,7 @@ public class TimeLineSlotView extends GLView {
 
         private int mUnitCount;
         private int mContentLength;
+        private int mBottomInset;
         private int mScrollPosition;
 
         public void setSlotSpec(TimeLineSlotView.Spec spec) {
@@ -649,7 +658,7 @@ public class TimeLineSlotView extends GLView {
         }
 
         public int getScrollLimit() {
-            return Math.max(0, mContentLength - mHeight);
+            return Math.max(0, mContentLength + mBottomInset - mHeight);
         }
 
         public void createSlots() {

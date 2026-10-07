@@ -219,6 +219,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
 
             // Set the mSlotView as a reference point to the open animation
             mOpenCenter.setReferencePosition(0, slotViewTop);
+            mSlotView.setContentBottomInset(mActivity.getContentBottomInset());
             mSlotView.layout(slotViewLeft, slotViewTop, slotViewRight,
                     slotViewBottom);
 
