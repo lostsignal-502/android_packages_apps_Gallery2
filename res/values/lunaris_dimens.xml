@@ -10,8 +10,15 @@
     <dimen name="lunaris_pill_margin">16dp</dimen>
     <dimen name="lunaris_pill_item_width">88dp</dimen>
     <dimen name="lunaris_pill_label_size">13sp</dimen>
-    <dimen name="lunaris_photo_controls_height">60dp</dimen>
-    <dimen name="lunaris_photo_controls_item_width">72dp</dimen>
+    <dimen name="lunaris_photo_controls_height">64dp</dimen>
+    <dimen name="lunaris_photo_controls_radius">32dp</dimen>
+    <dimen name="lunaris_photo_controls_padding">8dp</dimen>
+    <dimen name="lunaris_photo_control_size">48dp</dimen>
+    <dimen name="lunaris_photo_control_spacing">4dp</dimen>
+    <dimen name="lunaris_photo_fab_radius">20dp</dimen>
+    <dimen name="lunaris_photo_fab_gap">8dp</dimen>
+    <dimen name="lunaris_photo_title_size">18sp</dimen>
+    <dimen name="lunaris_photo_subtitle_size">13sp</dimen>
     <dimen name="lunaris_dialog_radius">28dp</dimen>
     <dimen name="lunaris_blur_behind_radius">16dp</dimen>
     <dimen name="lunaris_dialog_blur_radius">40dp</dimen>

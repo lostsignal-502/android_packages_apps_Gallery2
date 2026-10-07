@@ -23,11 +23,36 @@
     </style>
 
     <style name="Lunaris.PhotoControl" parent="">
-        <item name="android:layout_width">@dimen/lunaris_photo_controls_item_width</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@drawable/lunaris_pill_item_ripple</item>
+        <item name="android:layout_width">@dimen/lunaris_photo_control_size</item>
+        <item name="android:layout_height">@dimen/lunaris_photo_control_size</item>
+        <item name="android:layout_marginStart">@dimen/lunaris_photo_control_spacing</item>
+        <item name="android:layout_marginEnd">@dimen/lunaris_photo_control_spacing</item>
+        <item name="android:background">@drawable/lunaris_photo_control_ripple</item>
         <item name="android:scaleType">center</item>
         <item name="android:stateListAnimator">@animator/lunaris_press_scale</item>
+        <item name="android:tint">@android:color/white</item>
+    </style>
+
+    <style name="Lunaris.PhotoFab" parent="">
+        <item name="android:layout_width">@dimen/lunaris_photo_controls_height</item>
+        <item name="android:layout_height">@dimen/lunaris_photo_controls_height</item>
+        <item name="android:layout_marginStart">@dimen/lunaris_photo_fab_gap</item>
+        <item name="android:background">@drawable/lunaris_photo_fab_bg</item>
+        <item name="android:elevation">6dp</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:stateListAnimator">@animator/lunaris_press_scale</item>
+        <item name="android:tint">@android:color/system_on_primary_container_dark</item>
+    </style>
+
+    <style name="Lunaris.PhotoTitle" parent="@android:style/TextAppearance.Material.Widget.Toolbar.Title">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/lunaris_photo_title_size</item>
+    </style>
+
+    <style name="Lunaris.PhotoSubtitle" parent="@android:style/TextAppearance.Material.Widget.Toolbar.Subtitle">
+        <item name="android:textColor">#B3FFFFFF</item>
+        <item name="android:textSize">@dimen/lunaris_photo_subtitle_size</item>
     </style>
 
     <style name="Lunaris.PopupMenu" parent="@android:style/Widget.DeviceDefault.PopupMenu">

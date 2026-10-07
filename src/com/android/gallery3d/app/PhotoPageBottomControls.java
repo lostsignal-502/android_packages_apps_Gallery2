@@ -50,8 +50,6 @@ public class PhotoPageBottomControls implements OnClickListener {
     private boolean mContainerVisible = false;
     private Map<View, Boolean> mControlsVisible = new HashMap<View, Boolean>();
 
-    private Animation mContainerAnimIn = new AlphaAnimation(0f, 1f);
-    private Animation mContainerAnimOut = new AlphaAnimation(1f, 0f);
     private static final int CONTAINER_ANIM_DURATION_MS = 200;
 
     private static final int CONTROL_ANIM_DURATION_MS = 150;
@@ -75,32 +73,39 @@ public class PhotoPageBottomControls implements OnClickListener {
         mParentLayout.addView(mContainer);
         mBaseBottomMargin =
                 ((ViewGroup.MarginLayoutParams) mContainer.getLayoutParams()).bottomMargin;
-        for (int i = mContainer.getChildCount() - 1; i >= 0; i--) {
-            View child = mContainer.getChildAt(i);
-            child.setOnClickListener(this);
-            mControlsVisible.put(child, false);
-            if (i == 0)
-                mControlsVisible.put(mContainer, false);
-        }
+        mControlsVisible.put(mContainer, false);
+        addControls(mContainer);
 
-        mContainerAnimIn.setDuration(CONTAINER_ANIM_DURATION_MS);
-        mContainerAnimOut.setDuration(CONTAINER_ANIM_DURATION_MS);
 
         mDelegate.refreshBottomControlsWhenReady();
     }
 
+    private void addControls(ViewGroup group) {
+        for (int i = group.getChildCount() - 1; i >= 0; i--) {
+            View child = group.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                addControls((ViewGroup) child);
+            } else {
+                child.setOnClickListener(this);
+                mControlsVisible.put(child, false);
+            }
+        }
+    }
+
     private void hide() {
-        mContainer.clearAnimation();
-        mContainerAnimOut.reset();
-        mContainer.startAnimation(mContainerAnimOut);
-        mContainer.setVisibility(View.INVISIBLE);
+        mContainer.animate().cancel();
+        mContainer.animate().alpha(0f).setDuration(CONTAINER_ANIM_DURATION_MS)
+                .withEndAction(() -> mContainer.setVisibility(View.INVISIBLE));
     }
 
     private void show() {
-        mContainer.clearAnimation();
-        mContainerAnimIn.reset();
-        mContainer.startAnimation(mContainerAnimIn);
-        mContainer.setVisibility(View.VISIBLE);
+        mContainer.animate().cancel();
+        if (mContainer.getVisibility() != View.VISIBLE) {
+            mContainer.setAlpha(0f);
+            mContainer.setVisibility(View.VISIBLE);
+        }
+        mContainer.animate().alpha(1f).setDuration(CONTAINER_ANIM_DURATION_MS)
+                .withEndAction(null);
     }
 
     public void refresh() {

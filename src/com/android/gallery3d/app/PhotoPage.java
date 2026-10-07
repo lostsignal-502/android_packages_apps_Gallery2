@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,6 +79,7 @@ import com.android.gallery3d.util.GalleryUtils;
 import com.android.gallery3d.util.UsageStatistics;
 import com.android.gallery3d.util.ViewGifImage;
 
+import java.io.File;
 import java.util.List;
 import java.util.Locale;
 
@@ -547,7 +549,7 @@ public abstract class PhotoPage extends ActivityState implements
                         if (item != null) {
                             MediaItem photo = mModel.getMediaItem(0);
                             if (photo != null) {
-                                mActionBar.setTitle(photo.getName());
+                                updateTitle(photo);
                                 updateCurrentPhoto(photo);
                             }
                         }
@@ -654,6 +656,9 @@ public abstract class PhotoPage extends ActivityState implements
         } else if (control == R.id.photopage_bottom_control_share) {
             mShareIntent = new Intent(Intent.ACTION_SEND);
             return mShowBars;
+        } else if (control == R.id.photopage_bottom_control_details) {
+            return mShowBars
+                    && (mCurrentPhoto.getSupportedOperations() & MediaObject.SUPPORT_INFO) != 0;
         } else if (control == R.id.photopage_bottom_control_delete) {
             return mShowBars;
         } else {
@@ -665,6 +670,12 @@ public abstract class PhotoPage extends ActivityState implements
     public void onBottomControlClicked(int control) {
         if (control == R.id.photopage_bottom_control_edit) {
             launchPhotoEditor();
+        } else if (control == R.id.photopage_bottom_control_details) {
+            if (mShowDetails) {
+                hideDetails();
+            } else {
+                showDetails();
+            }
         } else if (control == R.id.photopage_bottom_control_share) {
             if (mModel != null && mModel.getMediaItem(0) != null) {
                 Uri uri = mActivity.getDataManager().getContentUri(
@@ -1158,7 +1169,7 @@ public abstract class PhotoPage extends ActivityState implements
         final int itemId = item.getItemId();
         String confirmMsg = null;
         if (itemId == android.R.id.home) {
-            onUpPressed();
+            onBackPressed();
         } else if (itemId == R.id.action_slideshow) {
             Bundle data = new Bundle();
             data.putString(SlideshowPage.KEY_SET_PATH, mMediaSet.getPath().toString());
@@ -1575,8 +1586,7 @@ public abstract class PhotoPage extends ActivityState implements
             mMediaSet.setShowAlbumsetTimeTitle(false);
         }
 
-        mActionBar.setDisplayOptions(
-                (false && (mSetPathString != null)), true);
+        mActionBar.setDisplayOptions(true, true);
         mActionBar.addOnMenuVisibilityListener(mMenuVisibilityListener);
         refreshBottomControlsWhenReady();
         if (((mSecureAlbum == null) && (mSetPathString != null))) {
@@ -1649,6 +1659,23 @@ public abstract class PhotoPage extends ActivityState implements
             switchToGrid();
         }
     }*/
+
+    private void updateTitle(MediaItem photo) {
+        long date = photo.getDateInMs();
+        if (date <= 0 && photo.getFilePath() != null) {
+            date = new File(photo.getFilePath()).lastModified();
+        }
+        if (date <= 0) {
+            mActionBar.setTitle(photo.getName());
+            mActionBar.setSubtitle(null);
+            return;
+        }
+        final Context context = mActivity.getAndroidContext();
+        mActionBar.setTitle(DateUtils.formatDateTime(context, date,
+                DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR));
+        mActionBar.setSubtitle(DateUtils.formatDateTime(context, date,
+                DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_WEEKDAY));
+    }
 
     @Override
     public void refreshBottomControlsWhenReady() {

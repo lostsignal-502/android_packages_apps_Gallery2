@@ -1,38 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 Lunaris-AOSP
+     SPDX-License-Identifier: Apache-2.0
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/photopage_bottom_controls"
     android:theme="@android:style/Theme.DeviceDefault"
     android:layout_width="wrap_content"
-    android:layout_height="@dimen/lunaris_photo_controls_height"
+    android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:layout_centerHorizontal="true"
     android:layout_marginBottom="@dimen/lunaris_pill_margin"
-    android:background="@drawable/lunaris_photo_controls_bg"
-    android:elevation="6dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="@dimen/lunaris_pill_padding"
-    android:visibility="gone" >
+    android:visibility="gone">
+
+    <LinearLayout
+        android:id="@+id/photopage_bottom_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/lunaris_photo_controls_height"
+        android:background="@drawable/lunaris_photo_controls_bg"
+        android:elevation="6dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/lunaris_photo_controls_padding"
+        android:paddingEnd="@dimen/lunaris_photo_controls_padding">
+
+        <ImageButton
+            android:id="@+id/photopage_bottom_control_share"
+            style="@style/Lunaris.PhotoControl"
+            android:contentDescription="@string/share"
+            android:src="@drawable/lunaris_ic_share"
+            android:tooltipText="@string/share"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/photopage_bottom_control_details"
+            style="@style/Lunaris.PhotoControl"
+            android:contentDescription="@string/details"
+            android:src="@drawable/lunaris_ic_info"
+            android:tooltipText="@string/details"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/photopage_bottom_control_delete"
+            style="@style/Lunaris.PhotoControl"
+            android:contentDescription="@string/delete"
+            android:src="@drawable/lunaris_ic_delete"
+            android:tooltipText="@string/delete"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/photopage_bottom_control_edit"
-        style="@style/Lunaris.PhotoControl"
+        style="@style/Lunaris.PhotoFab"
         android:contentDescription="@string/edit"
-        android:src="@drawable/edit"
-        android:visibility="gone" />
-
-    <ImageButton
-        android:id="@+id/photopage_bottom_control_share"
-        style="@style/Lunaris.PhotoControl"
-        android:contentDescription="@string/share"
-        android:src="@drawable/share"
-        android:visibility="gone" />
-
-    <ImageButton
-        android:id="@+id/photopage_bottom_control_delete"
-        style="@style/Lunaris.PhotoControl"
-        android:contentDescription="@string/delete"
-        android:src="@drawable/delete"
+        android:src="@drawable/lunaris_ic_tune"
+        android:tooltipText="@string/edit"
         android:visibility="gone" />
 
 </LinearLayout>

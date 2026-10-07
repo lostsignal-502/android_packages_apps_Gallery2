@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.app;
 
+import android.animation.StateListAnimator;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.OnMenuVisibilityListener;
@@ -454,6 +455,10 @@ public class GalleryActionBar {
         mShareIntent = shareIntent;
     }
 
+    private Drawable mBarBackground;
+    private StateListAnimator mBarAnimator;
+    private float mToolbarElevation;
+
     public void setBackGroundTransparent() {
         mActionBar.setBackgroundDrawable(
                 mContext.getDrawable(R.drawable.lunaris_photo_toolbar_scrim));
@@ -467,13 +472,38 @@ public class GalleryActionBar {
         applyChrome(false);
     }
 
+    private void applyBarSurface(Toolbar toolbar, boolean overPhoto) {
+        final View bar = (View) toolbar.getParent();
+        if (mBarBackground == null) {
+            mBarBackground = bar.getBackground();
+            mBarAnimator = bar.getStateListAnimator();
+            mToolbarElevation = toolbar.getElevation();
+        }
+        if (overPhoto) {
+            bar.setStateListAnimator(null);
+            bar.setBackground(null);
+            toolbar.setElevation(0);
+        } else {
+            bar.setBackground(mBarBackground);
+            bar.setStateListAnimator(mBarAnimator);
+            toolbar.setElevation(mToolbarElevation);
+        }
+    }
+
     private void applyChrome(boolean overPhoto) {
         final int tint = overPhoto ? Color.WHITE
                 : mContext.getColor(R.color.lunaris_on_surface);
         final Toolbar toolbar = mActivity.getToolbar();
         if (toolbar != null) {
+            applyBarSurface(toolbar, overPhoto);
+            toolbar.setTitleTextAppearance(mContext,
+                    overPhoto ? R.style.Lunaris_PhotoTitle : R.style.ToolbarTitleStyle);
+            toolbar.setSubtitleTextAppearance(mContext, overPhoto
+                    ? R.style.Lunaris_PhotoSubtitle
+                    : android.R.style.TextAppearance_Material_Widget_Toolbar_Subtitle);
+            if (!overPhoto) toolbar.setSubtitle(null);
             toolbar.setTitleTextColor(tint);
-            toolbar.setSubtitleTextColor(tint);
+            toolbar.setSubtitleTextColor(overPhoto ? 0xB3FFFFFF : tint);
             final Drawable overflow = mContext.getDrawable(R.drawable.more).mutate();
             overflow.setTint(tint);
             toolbar.setOverflowIcon(overflow);
@@ -481,6 +511,7 @@ public class GalleryActionBar {
         final Drawable up = mContext.getDrawable(R.drawable.back).mutate();
         up.setTint(tint);
         mActionBar.setHomeAsUpIndicator(up);
+        mActionBar.setDisplayHomeAsUpEnabled(overPhoto);
 
         final Window window = ((Activity) mActivity).getWindow();
         window.setStatusBarColor(overPhoto ? Color.BLACK

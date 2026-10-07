@@ -29,6 +29,9 @@
 -->
 
 <com.google.android.material.appbar.AppBarLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:stateListAnimator="@null"
+    android:elevation="1dp"
+    android:outlineProvider="none"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:theme="@style/ToolbarTheme">
@@ -38,7 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/primary"
-        android:elevation="8dp"
+        android:elevation="0dp"
+        android:outlineProvider="none"
         android:titleTextAppearance="@style/ToolbarTitleStyle"
         android:popupTheme="@style/ToolbarPopUpTheme" />
 

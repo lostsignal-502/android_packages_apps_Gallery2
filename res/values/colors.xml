@@ -32,7 +32,7 @@
     <color name="album_placeholder">@color/lunaris_tile</color>
 
     <!-- configuration for photo page -->
-    <color name="photo_background">@color/black</color>
+    <color name="photo_background">@android:color/black</color>
     <color name="photo_placeholder">@color/light_black</color>
     <color name="photo_page_action_bar">#8A000000</color>
     <color name="photo_page_bottom_panel">#8A000000</color>

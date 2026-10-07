@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 Lunaris-AOSP
+     SPDX-License-Identifier: Apache-2.0
+-->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/lunaris_pressed_overlay">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/system_primary_container_dark" />
+            <corners android:radius="@dimen/lunaris_photo_fab_radius" />
+        </shape>
+    </item>
+</ripple>
