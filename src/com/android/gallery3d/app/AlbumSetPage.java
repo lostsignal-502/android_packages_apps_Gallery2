@@ -49,7 +49,6 @@ import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
-import com.android.gallery3d.glrenderer.FadeTexture;
 import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.picasasource.PicasaSource;
 import com.android.gallery3d.settings.GallerySettings;
@@ -236,8 +235,7 @@ public class AlbumSetPage extends ActivityState implements
             // Show pressed-up animation for the single-tap.
             mAlbumSetView.setPressedIndex(slotIndex);
             mAlbumSetView.setPressedUp();
-            mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_PICK_ALBUM, slotIndex, 0),
-                    FadeTexture.DURATION);
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_PICK_ALBUM, slotIndex, 0));
         }
     }
 

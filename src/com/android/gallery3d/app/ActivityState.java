@@ -196,7 +196,6 @@ abstract public class ActivityState {
         }
         if (mNextTransition != StateTransitionAnimation.Transition.None) {
             mActivity.getTransitionStore().put(KEY_TRANSITION_IN, mNextTransition);
-            PreparePageFadeoutTexture.prepareFadeOutTexture(mActivity, mContentPane);
             mNextTransition = StateTransitionAnimation.Transition.None;
         }
     }

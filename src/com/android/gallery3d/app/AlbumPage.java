@@ -50,7 +50,6 @@ import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.filtershow.crop.CropActivity;
 import com.android.gallery3d.filtershow.crop.CropExtras;
-import com.android.gallery3d.glrenderer.FadeTexture;
 import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.ui.ActionModeHandler;
 import com.android.gallery3d.ui.ActionModeHandler.ActionModeListener;
@@ -324,8 +323,7 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             // Render transition in pressed state
             mAlbumView.setPressedIndex(slotIndex);
             mAlbumView.setPressedUp();
-            mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_PICK_PHOTO, slotIndex, 0),
-                    FadeTexture.DURATION);
+            mHandler.sendMessage(mHandler.obtainMessage(MSG_PICK_PHOTO, slotIndex, 0));
         }
     }
 

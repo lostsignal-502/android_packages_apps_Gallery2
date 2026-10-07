@@ -56,7 +56,6 @@ import com.android.gallery3d.data.Path;
 import com.android.gallery3d.data.ClusterAlbumSet;
 import com.android.gallery3d.filtershow.crop.CropActivity;
 import com.android.gallery3d.filtershow.crop.CropExtras;
-import com.android.gallery3d.glrenderer.FadeTexture;
 import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.ui.ActionModeHandler;
 import com.android.gallery3d.ui.ActionModeHandler.ActionModeListener;
@@ -293,8 +292,7 @@ public class TimeLinePage extends ActivityState implements
                 // Render transition in pressed state
                 mAlbumView.setPressedIndex(slotIndex);
                 mAlbumView.setPressedUp();
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(MSG_PICK_PHOTO, slotIndex, 0),
-                        FadeTexture.DURATION);
+                mHandler.sendMessage(mHandler.obtainMessage(MSG_PICK_PHOTO, slotIndex, 0));
             }
     }
 
