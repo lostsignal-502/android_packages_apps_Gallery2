@@ -25,7 +25,7 @@ public abstract class FadeTexture implements Texture {
     private static final String TAG = "FadeTexture";
 
     // The duration of the fading animation in milliseconds
-    public static final int DURATION = 180;
+    public static final int DURATION = 100;
 
     private final long mStartTime;
     private final int mWidth;

@@ -17,8 +17,8 @@
 package com.android.gallery3d.anim;
 
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.PathInterpolator;
 
 import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.glrenderer.RawTexture;
@@ -33,9 +33,9 @@ public class StateTransitionAnimation extends Animation {
         public static final Spec PHOTO_INCOMING;
 
         private static final Interpolator DEFAULT_INTERPOLATOR =
-                new DecelerateInterpolator();
+                new PathInterpolator(0.05f, 0.7f, 0.1f, 1f);
 
-        public int duration = 330;
+        public int duration = 250;
         public float backgroundAlphaFrom = 0;
         public float backgroundAlphaTo = 0;
         public float backgroundScaleFrom = 0;
@@ -52,23 +52,23 @@ public class StateTransitionAnimation extends Animation {
 
         static {
             OUTGOING = new Spec();
-            OUTGOING.backgroundAlphaFrom = 0.5f;
+            OUTGOING.backgroundAlphaFrom = 1f;
             OUTGOING.backgroundAlphaTo = 0f;
             OUTGOING.backgroundScaleFrom = 1f;
-            OUTGOING.backgroundScaleTo = 0f;
-            OUTGOING.contentAlphaFrom = 0.5f;
+            OUTGOING.backgroundScaleTo = 0.92f;
+            OUTGOING.contentAlphaFrom = 0f;
             OUTGOING.contentAlphaTo = 1f;
-            OUTGOING.contentScaleFrom = 3f;
+            OUTGOING.contentScaleFrom = 1.04f;
             OUTGOING.contentScaleTo = 1f;
 
             INCOMING = new Spec();
             INCOMING.overlayAlphaFrom = 1f;
             INCOMING.overlayAlphaTo = 0f;
             INCOMING.overlayScaleFrom = 1f;
-            INCOMING.overlayScaleTo = 3f;
+            INCOMING.overlayScaleTo = 1.04f;
             INCOMING.contentAlphaFrom = 0f;
             INCOMING.contentAlphaTo = 1f;
-            INCOMING.contentScaleFrom = 0.25f;
+            INCOMING.contentScaleFrom = 0.92f;
             INCOMING.contentScaleTo = 1f;
 
             PHOTO_INCOMING = INCOMING;
