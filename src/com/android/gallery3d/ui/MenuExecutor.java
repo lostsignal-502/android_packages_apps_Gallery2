@@ -18,6 +18,7 @@ package com.android.gallery3d.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,6 +31,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import androidx.print.PrintHelper;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,8 +40,10 @@ import com.android.gallery3d.R;
 import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.data.DataManager;
+import com.android.gallery3d.data.LocalMediaItem;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
+import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.filtershow.crop.CropActivity;
 import com.android.gallery3d.util.Future;
@@ -412,6 +416,45 @@ public class MenuExecutor {
         return result;
     }
 
+    private static final int REQUEST_DELETE = 0x6c75;
+    private static final int DELETE_BATCH = 500;
+
+    private static boolean isDelete(int cmd) {
+        return cmd == R.id.action_delete || cmd == R.id.photopage_bottom_control_delete;
+    }
+
+    private static boolean collectDeleteUris(MediaObject obj, ArrayList<Uri> uris) {
+        if (obj instanceof LocalMediaItem) {
+            uris.add(obj.getContentUri());
+            return true;
+        }
+        if (!(obj instanceof MediaSet)) return false;
+        final MediaSet set = (MediaSet) obj;
+        final ArrayList<Uri> found = new ArrayList<>();
+        for (int i = 0, n = set.getSubMediaSetCount(); i < n; i++) {
+            if (!collectDeleteUris(set.getSubMediaSet(i), found)) return false;
+        }
+        final int count = set.getMediaItemCount();
+        for (int start = 0; start < count; start += DELETE_BATCH) {
+            for (MediaItem item : set.getMediaItem(start, DELETE_BATCH)) {
+                if (!collectDeleteUris(item, found)) return false;
+            }
+        }
+        uris.addAll(found);
+        return true;
+    }
+
+    private void requestDelete(ArrayList<Uri> uris) {
+        try {
+            final PendingIntent request = MediaStore.createDeleteRequest(
+                    mActivity.getContentResolver(), uris);
+            mActivity.startIntentSenderForResult(request.getIntentSender(),
+                    REQUEST_DELETE, null, 0, 0, 0);
+        } catch (Exception e) {
+            Log.w(TAG, "failed to request delete", e);
+        }
+    }
+
     private class MediaOperation implements Job<Void> {
         private final ArrayList<Path> mItems;
         private final int mOperation;
@@ -429,6 +472,7 @@ public class MenuExecutor {
             int index = 0;
             DataManager manager = mActivity.getDataManager();
             int result = EXECUTION_RESULT_SUCCESS;
+            final ArrayList<Uri> deleteUris = new ArrayList<>();
             try {
                 onProgressStart(mListener);
                 for (Path id : mItems) {
@@ -436,10 +480,18 @@ public class MenuExecutor {
                         result = EXECUTION_RESULT_CANCEL;
                         break;
                     }
+                    if (isDelete(mOperation)
+                            && collectDeleteUris(manager.getMediaObject(id), deleteUris)) {
+                        onProgressUpdate(index++, mListener);
+                        continue;
+                    }
                     if (!execute(manager, jc, mOperation, id)) {
                         result = EXECUTION_RESULT_FAIL;
                     }
                     onProgressUpdate(index++, mListener);
+                }
+                if (result != EXECUTION_RESULT_CANCEL && !deleteUris.isEmpty()) {
+                    mHandler.post(() -> requestDelete(deleteUris));
                 }
             } catch (Throwable th) {
                 Log.e(TAG, "failed to execute operation " + mOperation
