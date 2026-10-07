@@ -58,6 +58,7 @@ import com.android.gallery3d.ui.DetailsHelper;
 import com.android.gallery3d.ui.DetailsHelper.CloseListener;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLView;
+import com.android.gallery3d.ui.LunarisBlurConfig;
 import com.android.gallery3d.ui.PhotoFallbackEffect;
 import com.android.gallery3d.ui.RelativePosition;
 import com.android.gallery3d.ui.SelectionManager;
@@ -731,6 +732,12 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             GalleryUtils.startCameraActivity(mActivity);
         } else if (itemId == R.id.action_view_type) {
             switchView();
+        } else if (itemId == R.id.action_nav_blur) {
+            LunarisBlurConfig.showDialog((Activity) mActivity, intensity -> {
+                if (mActivity instanceof GalleryActivity) {
+                    ((GalleryActivity) mActivity).applyNavBlurIntensity(intensity);
+                }
+            });
         } else {
             return false;
         }

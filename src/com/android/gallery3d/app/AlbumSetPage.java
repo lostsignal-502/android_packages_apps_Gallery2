@@ -59,6 +59,7 @@ import com.android.gallery3d.ui.DetailsHelper;
 import com.android.gallery3d.ui.DetailsHelper.CloseListener;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLView;
+import com.android.gallery3d.ui.LunarisBlurConfig;
 import com.android.gallery3d.ui.SelectionManager;
 import com.android.gallery3d.ui.SlotView;
 import com.android.gallery3d.ui.SynchronizedHandler;
@@ -169,7 +170,6 @@ public class AlbumSetPage extends ActivityState implements
             int slotViewBottom = bottom - top - paddingBottom;
             int slotViewRight = right - left - paddingRight;
             int slotViewLeft = paddingLeft ;
-
 
             if (mShowDetails) {
                 mDetailsHelper.layout(slotViewLeft, slotViewTop, slotViewRight, slotViewBottom);
@@ -661,6 +661,12 @@ public class AlbumSetPage extends ActivityState implements
                     DataManager.INCLUDE_ALL);
             data.putString(AlbumSetPage.KEY_MEDIA_PATH, mediaPath);
             mActivity.getStateManager().startState(ManageCachePage.class, data);
+        } else if (itemId == R.id.action_nav_blur) {
+            LunarisBlurConfig.showDialog((Activity) mActivity, intensity -> {
+                if (mActivity instanceof GalleryActivity) {
+                    ((GalleryActivity) mActivity).applyNavBlurIntensity(intensity);
+                }
+            });
         } else {
             return false;
         }
@@ -768,6 +774,7 @@ public class AlbumSetPage extends ActivityState implements
             }
         });
     }
+
 
     private class MyLoadingListener implements LoadingListener {
         @Override

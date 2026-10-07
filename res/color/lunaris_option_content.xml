@@ -4,5 +4,6 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:alpha="0.62" android:color="@color/lunaris_primary_container" />
+    <item android:color="@color/lunaris_on_primary_container" android:state_selected="true" />
+    <item android:color="@color/lunaris_on_surface_variant" />
 </selector>

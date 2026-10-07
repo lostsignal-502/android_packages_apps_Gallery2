@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 Lunaris-AOSP
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <string name="lunaris_nav_blur">Navigation blur</string>
+    <string name="lunaris_nav_blur_summary">Adjust the blur in the navigation bar.</string>
+    <string name="lunaris_blur_off">Off</string>
+    <string name="lunaris_blur_low">Low</string>
+    <string name="lunaris_blur_medium">Medium</string>
+    <string name="lunaris_blur_high">High</string>
+</resources>

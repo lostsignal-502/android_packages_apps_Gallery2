@@ -60,6 +60,9 @@ import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.picasasource.PicasaSource;
+import com.android.gallery3d.ui.LunarisBackdropBlur;
+import com.android.gallery3d.ui.LunarisBlurConfig;
+import com.android.gallery3d.ui.LunarisBlurTracker;
 import com.android.gallery3d.ui.PillNavigationView;
 import com.android.gallery3d.util.GalleryUtils;
 
@@ -97,8 +100,10 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
     public Toolbar mToolbar;
 
     private PillNavigationView mBottomNavigation;
+    private LunarisBlurTracker mBlurTracker;
     private int mNavigationBarInset;
     private RelativeLayout mGLParentLayout;
+
     private RelativeLayout.LayoutParams params;
 
     /** DrawerLayout is not supported in some entrances.
@@ -191,22 +196,48 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
             getGLRoot().unlockRenderThread();
         });
 
+        if (getGLRoot() != null) {
+            final float radius = getResources().getDimension(R.dimen.lunaris_pill_radius);
+            mBlurTracker = new LunarisBlurTracker(getGLRoot(), LunarisBackdropBlur.REQUEST_NAVIGATION,
+                    getColor(R.color.lunaris_navigation_blur_tint),
+                    new View[] { mBottomNavigation }, new float[] { radius });
+            applyNavBlurConfig();
+        }
+
         getWindow().setDecorFitsSystemWindows(false);
         getWindow().setNavigationBarColor(Color.TRANSPARENT);
         getWindow().setNavigationBarContrastEnforced(false);
         final View root = findViewById(R.id.drawerLayout);
-        final int pillMargin = getResources().getDimensionPixelSize(R.dimen.lunaris_pill_margin);
         root.setOnApplyWindowInsetsListener((v, insets) -> {
             v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
                     insets.getSystemWindowInsetRight(), 0);
             mNavigationBarInset = insets.getSystemWindowInsetBottom();
             ViewGroup.MarginLayoutParams lp =
                     (ViewGroup.MarginLayoutParams) mBottomNavigation.getLayoutParams();
-            lp.bottomMargin = mNavigationBarInset + pillMargin;
+            lp.bottomMargin = computePillBottomMargin(mNavigationBarInset);
             mBottomNavigation.setLayoutParams(lp);
             requestContentLayout();
             return WindowInsets.CONSUMED;
         });
+    }
+
+    private int computePillBottomMargin(int navInset) {
+        final float density = getResources().getDisplayMetrics().density;
+        return navInset + Math.round((navInset > 36f * density ? 6f : 12f) * density);
+    }
+
+    public void applyNavBlurIntensity(int intensity) {
+        if (mBottomNavigation == null) return;
+        final boolean blur = intensity > 0 && mBlurTracker != null;
+        mBottomNavigation.setBackgroundResource(blur
+                ? R.drawable.lunaris_pill_bg : R.drawable.lunaris_pill_bg_solid);
+        if (mBlurTracker == null) return;
+        if (blur) getGLRoot().setBackdropBlurStrength(LunarisBlurConfig.strengthFor(intensity));
+        mBlurTracker.setEnabled(blur);
+    }
+
+    public void applyNavBlurConfig() {
+        applyNavBlurIntensity(LunarisBlurConfig.getBlurIntensity(this));
     }
 
     public void toggleNavBar(boolean show) {
@@ -231,8 +262,14 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         if (!mBottomNavigation.isPillShown()) {
             return mNavigationBarInset;
         }
-        return mNavigationBarInset + mBottomNavigation.getLayoutParams().height
-                + 2 * getResources().getDimensionPixelSize(R.dimen.lunaris_pill_margin);
+        final float density = getResources().getDisplayMetrics().density;
+        final int pillHeight = mBottomNavigation.getLayoutParams().height;
+        final ViewGroup.MarginLayoutParams lp =
+                (ViewGroup.MarginLayoutParams) mBottomNavigation.getLayoutParams();
+        final int bottomMargin = (lp != null) ? lp.bottomMargin
+                : computePillBottomMargin(mNavigationBarInset);
+        final int contentGap = Math.round(10f * density);
+        return bottomMargin + pillHeight + contentGap;
     }
 
     private void requestContentLayout() {
@@ -529,6 +566,7 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         if (mVersionCheckDialog != null) {
             mVersionCheckDialog.show();
         }
+        applyNavBlurConfig();
     }
 
     @Override

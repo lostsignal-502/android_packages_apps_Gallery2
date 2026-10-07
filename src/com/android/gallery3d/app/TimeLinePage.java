@@ -63,6 +63,7 @@ import com.android.gallery3d.ui.DetailsHelper;
 import com.android.gallery3d.ui.DetailsHelper.CloseListener;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLView;
+import com.android.gallery3d.ui.LunarisBlurConfig;
 import com.android.gallery3d.ui.PhotoFallbackEffect;
 import com.android.gallery3d.ui.RelativePosition;
 import com.android.gallery3d.ui.SelectionManager;
@@ -153,7 +154,6 @@ public class TimeLinePage extends ActivityState implements
 
     private Button mCameraButton;
     private boolean mShowedEmptyToastForSelf = false;
-
 
     @Override
     protected int getBackgroundColorId() {
@@ -651,6 +651,12 @@ public class TimeLinePage extends ActivityState implements
             }
         } else if (itemId == R.id.action_camera) {
             GalleryUtils.startCameraActivity(mActivity);
+        } else if (itemId == R.id.action_nav_blur) {
+            LunarisBlurConfig.showDialog((Activity) mActivity, intensity -> {
+                if (mActivity instanceof GalleryActivity) {
+                    ((GalleryActivity) mActivity).applyNavBlurIntensity(intensity);
+                }
+            });
         } else {
             return false;
         }
@@ -774,6 +780,7 @@ public class TimeLinePage extends ActivityState implements
             //hideCameraButton();
         }
     }
+
 
     private class MyLoadingListener implements LoadingListener {
         @Override

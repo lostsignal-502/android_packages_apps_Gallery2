@@ -88,6 +88,7 @@ public class GLRootView extends GLSurfaceView
     // mCompensation is the difference between the UI orientation on GLCanvas
     // and the framework orientation. See OrientationManager for details.
     private int mCompensation;
+    private final LunarisBackdropBlur mBackdropBlur = new LunarisBackdropBlur();
     // mCompensationMatrix maps the coordinates of touch events. It is kept sync
     // with mCompensation.
     private Matrix mCompensationMatrix = new Matrix();
@@ -386,6 +387,18 @@ public class GLRootView extends GLSurfaceView
         }
     }
 
+    @Override
+    public void setBackdropBlur(int key, float[] shapes, int tint) {
+        mBackdropBlur.setShapes(key, shapes, tint);
+        requestRender();
+    }
+
+    @Override
+    public void setBackdropBlurStrength(int levels) {
+        mBackdropBlur.setStrength(levels);
+        requestRender();
+    }
+
     private void onDrawFrameLocked(GL10 gl) {
         if (DEBUG_FPS) outputFps();
 
@@ -406,7 +419,10 @@ public class GLRootView extends GLSurfaceView
         mCanvas.save(GLCanvas.SAVE_FLAG_ALL);
         rotateCanvas(-mCompensation);
         if (mContentView != null) {
-           mContentView.render(mCanvas);
+            final boolean blur = mCompensation == 0
+                    && mBackdropBlur.begin(mCanvas, getWidth(), getHeight());
+            mContentView.render(mCanvas);
+            if (blur) mBackdropBlur.end(mCanvas);
         } else {
             // Make sure we always draw something to prevent displaying garbage
             mCanvas.clearBuffer();

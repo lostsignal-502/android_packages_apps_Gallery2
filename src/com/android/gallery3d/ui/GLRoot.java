@@ -24,6 +24,10 @@ import com.android.gallery3d.glrenderer.GLCanvas;
 
 public interface GLRoot {
 
+    public void setBackdropBlur(int key, float[] shapes, int tint);
+
+    public void setBackdropBlurStrength(int levels);
+
     // Listener will be called when GL is idle AND before each frame.
     // Mainly used for uploading textures.
     public static interface OnGLIdleListener {
