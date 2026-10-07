@@ -107,6 +107,7 @@ public class LocalVideo extends LocalMediaItem {
         dateTakenInMs = cursor.getLong(INDEX_DATE_TAKEN);
         dateAddedInSec = cursor.getLong(INDEX_DATE_ADDED);
         dateModifiedInSec = cursor.getLong(INDEX_DATE_MODIFIED);
+        if (dateTakenInMs == 0) dateTakenInMs = dateModifiedInSec * 1000;
         filePath = cursor.getString(INDEX_DATA);
         caption = getPathTile(filePath);
         durationInSec = cursor.getInt(INDEX_DURATION) / 1000;

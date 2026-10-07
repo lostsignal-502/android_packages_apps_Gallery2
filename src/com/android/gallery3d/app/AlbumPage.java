@@ -59,6 +59,7 @@ import com.android.gallery3d.ui.DetailsHelper.CloseListener;
 import com.android.gallery3d.ui.GLRoot;
 import com.android.gallery3d.ui.GLView;
 import com.android.gallery3d.ui.LunarisBlurConfig;
+import com.android.gallery3d.ui.LunarisGridConfig;
 import com.android.gallery3d.ui.PhotoFallbackEffect;
 import com.android.gallery3d.ui.RelativePosition;
 import com.android.gallery3d.ui.SelectionManager;
@@ -631,7 +632,8 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             mActionBar.setTitle(GalleryUtils.getSelectionModePrompt(typeBits));
         } else {
             inflator.inflate(R.menu.album, menu);
-            mActionBar.setTitle(mMediaSet.getName());
+            mActionBar.setTitle(mIsVideoScreen
+                    ? mActivity.getString(R.string.videos_title) : mMediaSet.getName());
 
             FilterUtils.setupMenuItems(mActionBar, mMediaSetPath, true);
 
@@ -732,6 +734,8 @@ public class AlbumPage extends ActivityState implements GalleryActionBar.Cluster
             GalleryUtils.startCameraActivity(mActivity);
         } else if (itemId == R.id.action_view_type) {
             switchView();
+        } else if (itemId == R.id.action_grid_size) {
+            LunarisGridConfig.showDialog((Activity) mActivity, mSlotView::changeGridColumns);
         } else if (itemId == R.id.action_nav_blur) {
             LunarisBlurConfig.showDialog((Activity) mActivity, intensity -> {
                 if (mActivity instanceof GalleryActivity) {

@@ -4,6 +4,7 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources>
+    <dimen name="lunaris_toolbar_height">64dp</dimen>
     <dimen name="lunaris_pill_radius">30dp</dimen>
     <dimen name="lunaris_pill_height">60dp</dimen>
     <dimen name="lunaris_pill_padding">4dp</dimen>
@@ -23,6 +24,9 @@
     <dimen name="lunaris_option_radius">20dp</dimen>
     <dimen name="lunaris_option_gap">4dp</dimen>
     <dimen name="lunaris_option_padding">16dp</dimen>
+    <dimen name="lunaris_grid_preview_size">52dp</dimen>
+    <dimen name="lunaris_grid_preview_gap">3dp</dimen>
+    <dimen name="lunaris_grid_preview_radius">3dp</dimen>
     <dimen name="lunaris_preset_height">56dp</dimen>
     <dimen name="lunaris_blur_behind_radius">16dp</dimen>
     <dimen name="lunaris_dialog_blur_radius">40dp</dimen>

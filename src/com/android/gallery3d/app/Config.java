@@ -22,12 +22,18 @@ import android.content.res.Resources;
 import com.android.gallery3d.R;
 import com.android.gallery3d.ui.AlbumSetSlotRenderer;
 import com.android.gallery3d.ui.AlbumSlotRenderer;
+import com.android.gallery3d.ui.LunarisGridConfig;
 import com.android.gallery3d.ui.SlotView;
 import com.android.gallery3d.ui.TimeLineSlotRenderer;
 import com.android.gallery3d.ui.TimeLineSlotView;
 
-final class Config {
+public final class Config {
     private static int sThemeKey;
+
+    public static synchronized void reload() {
+        AlbumPage.sInstance = null;
+        TimeLinePage.sInstance = null;
+    }
 
     private static synchronized void dropIfStale(Context context) {
         final int key = 31 * context.getResources().getConfiguration().uiMode
@@ -148,10 +154,9 @@ final class Config {
             placeholderColor = r.getColor(R.color.album_placeholder);
 
             slotViewSpec = new SlotView.Spec();
-            //slotViewSpec.rowsLand = r.getInteger(R.integer.album_rows_land);
-            //slotViewSpec.rowsPort = r.getInteger(R.integer.album_rows_port);
-            slotViewSpec.colsLand = r.getInteger(R.integer.album_cols_land);
-            slotViewSpec.colsPort = r.getInteger(R.integer.album_cols_port);
+            final int cols = LunarisGridConfig.getColumns(context);
+            slotViewSpec.colsPort = cols;
+            slotViewSpec.colsLand = LunarisGridConfig.getLandColumns(cols);
             slotViewSpec.slotWidth = r.getDimensionPixelSize(R.dimen.slot_width_album);
             slotViewSpec.slotHeight = r.getDimensionPixelSize(R.dimen.slot_height_album);
             slotViewSpec.slotGap = r.getDimensionPixelSize(R.dimen.album_slot_gap);
@@ -267,8 +272,9 @@ final class Config {
             placeholderColor = r.getColor(R.color.album_placeholder);
 
             slotViewSpec = new TimeLineSlotView.Spec();
-            slotViewSpec.colsLand = r.getInteger(R.integer.album_cols_land);
-            slotViewSpec.colsPort = r.getInteger(R.integer.album_cols_port);
+            final int cols = LunarisGridConfig.getColumns(context);
+            slotViewSpec.colsPort = cols;
+            slotViewSpec.colsLand = LunarisGridConfig.getLandColumns(cols);
             slotViewSpec.slotGapPort = r.getDimensionPixelSize(R.dimen.timeline_port_slot_gap);
             slotViewSpec.slotGapLand = r.getDimensionPixelSize(R.dimen.timeline_land_slot_gap);
             slotViewSpec.titleHeight = r.getDimensionPixelSize(R.dimen.timeline_title_height);

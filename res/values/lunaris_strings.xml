@@ -4,6 +4,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources>
+    <string name="lunaris_pictures">Pictures</string>
+    <string name="lunaris_today">Today</string>
+    <string name="lunaris_yesterday">Yesterday</string>
+    <string name="lunaris_grid_size">Grid size</string>
+    <string name="lunaris_grid_size_summary">You can also pinch the grid to change it.</string>
+    <plurals name="lunaris_grid_columns">
+        <item quantity="one">%d column</item>
+        <item quantity="other">%d columns</item>
+    </plurals>
     <string name="lunaris_nav_blur">Navigation blur</string>
     <string name="lunaris_nav_blur_summary">Adjust the blur in the navigation bar.</string>
     <string name="lunaris_blur_off">Off</string>

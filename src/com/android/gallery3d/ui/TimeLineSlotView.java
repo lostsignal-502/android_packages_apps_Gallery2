@@ -18,15 +18,20 @@
  */
 package com.android.gallery3d.ui;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Rect;
 import android.text.TextUtils;
 import android.view.GestureDetector;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import com.android.gallery3d.anim.Animation;
 import com.android.gallery3d.app.AbstractGalleryActivity;
+import com.android.gallery3d.app.Config;
 import com.android.gallery3d.common.ApiHelper.SystemProperties;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.glrenderer.GLCanvas;
@@ -78,9 +83,13 @@ public class TimeLineSlotView extends GLView {
 
     // Flag to check whether it is come from Photo Page.
     private boolean isFromPhotoPage = false;
+    private final AbstractGalleryActivity mActivity;
+    private final ScaleGestureDetector mScaleDetector;
 
     public TimeLineSlotView(AbstractGalleryActivity activity, Spec spec) {
+        mActivity = activity;
         mGestureDetector = new GestureDetector(activity, new MyGestureListener());
+        mScaleDetector = new ScaleGestureDetector(activity.getAndroidContext(), new MyScaleListener());
         mScroller = new ScrollerHelper(activity);
         setSlotSpec(spec);
     }
@@ -150,6 +159,19 @@ public class TimeLineSlotView extends GLView {
 
     public void setSlotSpec(Spec spec) {
         mLayout.setSlotSpec(spec);
+        invalidate();
+    }
+
+    public void changeGridColumns(int newCols) {
+        final Context context = mActivity.getAndroidContext();
+        LunarisGridConfig.setColumns(context, newCols);
+        Config.reload();
+        if (mActivity instanceof Activity) {
+            ((Activity) mActivity).getWindow().getDecorView()
+                    .performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
+        }
+        Config.TimeLinePage config = Config.TimeLinePage.get(context);
+        setSlotSpec(config.slotViewSpec);
     }
 
     @Override
@@ -196,6 +218,10 @@ public class TimeLineSlotView extends GLView {
 
     @Override
     protected boolean onTouch(MotionEvent event) {
+        mScaleDetector.onTouchEvent(event);
+        if (mScaleDetector.isInProgress()) {
+            return true;
+        }
         mGestureDetector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -488,6 +514,11 @@ public class TimeLineSlotView extends GLView {
 
         public void setSlotSpec(TimeLineSlotView.Spec spec) {
             mSpec = spec;
+            if (mHeight != 0) {
+                initLayoutParameters();
+                createSlots();
+                updateVisibleSlotRange();
+            }
         }
 
         public void setSlotCount(int[] count) {
@@ -689,6 +720,33 @@ public class TimeLineSlotView extends GLView {
             this.index = index;
             this.col = col;
             this.top = top;
+        }
+    }
+
+    private class MyScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+        private float mCumulativeScale = 1.0f;
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+            mCumulativeScale = 1.0f;
+            return true;
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            mCumulativeScale *= detector.getScaleFactor();
+            return true;
+        }
+
+        @Override
+        public void onScaleEnd(ScaleGestureDetector detector) {
+            final Context context = mActivity.getAndroidContext();
+            int currentCols = LunarisGridConfig.getColumns(context);
+            if (mCumulativeScale > 1.25f && currentCols > LunarisGridConfig.MIN_COLUMNS) {
+                changeGridColumns(currentCols - 1);
+            } else if (mCumulativeScale < 0.80f && currentCols < LunarisGridConfig.MAX_COLUMNS) {
+                changeGridColumns(currentCols + 1);
+            }
         }
     }
 }

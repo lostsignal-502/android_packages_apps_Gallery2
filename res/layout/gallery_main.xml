@@ -63,7 +63,7 @@
             android:id="@+id/action_timeline"
             style="@style/Lunaris.PillItem"
             android:drawableTop="@drawable/lunaris_ic_photos"
-            android:text="@string/timeline_title" />
+            android:text="@string/lunaris_pictures" />
 
         <TextView
             android:id="@+id/action_album"

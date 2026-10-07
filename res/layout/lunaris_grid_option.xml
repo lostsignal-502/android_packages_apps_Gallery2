@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 Lunaris-AOSP
+     SPDX-License-Identifier: Apache-2.0
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/lunaris_option_gap"
+    android:layout_marginEnd="@dimen/lunaris_option_gap"
+    android:layout_weight="1"
+    android:background="@drawable/lunaris_option_bg"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/lunaris_option_padding"
+    android:paddingBottom="@dimen/lunaris_option_padding"
+    android:stateListAnimator="@animator/lunaris_press_scale">
+
+    <com.android.gallery3d.ui.LunarisGridPreview
+        android:id="@+id/grid_preview"
+        android:layout_width="@dimen/lunaris_grid_preview_size"
+        android:layout_height="@dimen/lunaris_grid_preview_size"
+        android:duplicateParentState="true" />
+
+    <TextView
+        android:id="@+id/grid_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:duplicateParentState="true"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/lunaris_option_content"
+        android:textSize="13sp" />
+
+</LinearLayout>

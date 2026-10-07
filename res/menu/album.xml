@@ -29,6 +29,9 @@
 <!--     <item android:id="@+id/action_group_by" -->
 <!--             android:title="@string/group_by" -->
 <!--             android:showAsAction="never"/> -->
+    <item android:id="@+id/action_grid_size"
+        android:title="@string/lunaris_grid_size"
+        android:showAsAction="never" />
     <item android:id="@+id/action_nav_blur"
         android:title="@string/lunaris_nav_blur"
         android:showAsAction="never" />

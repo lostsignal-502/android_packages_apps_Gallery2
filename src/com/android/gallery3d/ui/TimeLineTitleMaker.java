@@ -68,7 +68,7 @@ public class TimeLineTitleMaker {
         paint.setColor(color);
         paint.setTypeface(Typeface.SANS_SERIF);
         if (isBold) {
-            paint.setTypeface(Typeface.create(Typeface.DEFAULT, 700, false));
+            paint.setTypeface(Typeface.create(Typeface.DEFAULT, 600, false));
         }
         return paint;
     }
@@ -123,20 +123,6 @@ public class TimeLineTitleMaker {
             canvas.translate(BORDER_SIZE, BORDER_SIZE);
 
 
-            StringBuilder sb = new StringBuilder();
-            if(mImageCount != 0) {
-                sb.append(mContext.getResources().getQuantityString(R.plurals.number_of_photos, mImageCount, mImageCount));
-                if(mVideoCount!=0) {
-                    sb.append("  " +mContext.getResources().getQuantityString(
-                             R.plurals.number_of_videos, mVideoCount, mVideoCount));
-                }
-            } else {
-                if(mVideoCount != 0) {
-                    sb.append(mContext.getResources().getQuantityString(
-                            R.plurals.number_of_videos, mVideoCount, mVideoCount));
-                }
-            }
-            String countString = sb.toString();
 
             if (jc.isCancelled()) return null;
 
@@ -158,22 +144,6 @@ public class TimeLineTitleMaker {
                 drawText(canvas, x, y, mTitle, width-x, mTitlePaint);
             }
 
-            if (countString != null) {
-
-                Rect mediaCountBounds = new Rect();
-                mCountPaint.getTextBounds(
-                        countString, 0, countString.length(), mediaCountBounds);
-                int w = mediaCountBounds.width();
-                y = (height - spec.timeLineCountFontSize)/2;
-                x = width - TIMELINETITLE_START_X - w;
-                // re-calculate x for RTL
-                if (View.LAYOUT_DIRECTION_RTL == TextUtils
-                        .getLayoutDirectionFromLocale(Locale.getDefault())) {
-                    x = TIMELINETITLE_START_X;
-                }
-                drawText(canvas, x, y, countString,
-                        width - x, mCountPaint);
-            }
             return bitmap;
         }
     }

@@ -20,10 +20,12 @@ import android.content.Context;
 import android.text.format.DateFormat;
 import android.text.format.DateUtils;
 
+import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
 import com.android.gallery3d.util.GalleryUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -117,27 +119,19 @@ public class TimeClustering extends Clustering {
 
         Collections.sort(items, sDateComparator);
 
-        int n = items.size();
-        long minTime = 0;
-        long maxTime = 0;
-        for (int i = 0; i < n; i++) {
-            long t = items.get(i).dateInMs;
-            if (t == 0) continue;
-            if (minTime == 0) {
-                minTime = maxTime = t;
-            } else {
-                minTime = Math.min(minTime, t);
-                maxTime = Math.max(maxTime, t);
+        final Calendar calendar = Calendar.getInstance();
+        int lastDay = -1;
+        Cluster cluster = null;
+        for (SmallItem item : items) {
+            calendar.setTimeInMillis(item.dateInMs);
+            final int day = calendar.get(Calendar.YEAR) * 1000 + calendar.get(Calendar.DAY_OF_YEAR);
+            if (cluster == null || day != lastDay) {
+                cluster = new Cluster();
+                mClusters.add(cluster);
+                lastDay = day;
             }
+            cluster.addItem(item);
         }
-
-        setTimeRange(maxTime - minTime, n);
-
-        for (int i = 0; i < n; i++) {
-            compute(items.get(i));
-        }
-
-        compute(null);
 
         int m = mClusters.size();
         mNames = new String[m];
@@ -388,6 +382,18 @@ class Cluster {
         return mItems;
     }
 
+    private static String dayCaption(Context context, long time) {
+        if (DateUtils.isToday(time)) {
+            return context.getString(R.string.lunaris_today);
+        }
+        if (DateUtils.isToday(time + DateUtils.DAY_IN_MILLIS)) {
+            return context.getString(R.string.lunaris_yesterday);
+        }
+        return DateUtils.formatDateTime(context, time, DateUtils.FORMAT_SHOW_DATE
+                | DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY
+                | DateUtils.FORMAT_ABBREV_MONTH);
+    }
+
     public String generateCaption(Context context) {
         int n = mItems.size();
         long minTimestamp = 0;
@@ -417,26 +423,8 @@ class Cluster {
             caption = DateUtils.formatDateRange(context, minTimestamp,
                     maxTimestamp, DateUtils.FORMAT_ABBREV_ALL);
 
-            // Get a more granular date range string if the min and
-            // max timestamp are on the same day and from the
-            // current year.
             if (minDay.equals(maxDay)) {
-                int flags = DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_SHOW_DATE;
-                // Contains the year only if the date does not
-                // correspond to the current year.
-                String dateRangeWithOptionalYear = DateUtils.formatDateTime(
-                        context, minTimestamp, flags);
-                String dateRangeWithYear = DateUtils.formatDateTime(
-                        context, minTimestamp, flags | DateUtils.FORMAT_SHOW_YEAR);
-                if (!dateRangeWithOptionalYear.equals(dateRangeWithYear)) {
-                    // This means both dates are from the same year
-                    // - show the time.
-                    // Not enough room to display the time range.
-                    // Pick the mid-point.
-                    long midTimestamp = (minTimestamp + maxTimestamp) / 2;
-                    caption = DateUtils.formatDateRange(context, midTimestamp,
-                            midTimestamp, DateUtils.FORMAT_SHOW_TIME | flags);
-                }
+                return dayCaption(context, minTimestamp);
             }
         } else {
             // The items are not from the same year - only show
