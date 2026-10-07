@@ -258,6 +258,7 @@ public class MenuExecutor {
             } else {
                 mSelectionManager.selectAll();
             }
+            return;
         } else if (action == R.id.action_edit) {
             Intent intent = getIntentBySingleSelectedPath(Intent.ACTION_EDIT);
             if (intent != null) {
@@ -274,11 +275,12 @@ public class MenuExecutor {
                     }
                 }
             }
-        } else if (action == R.id.action_edit) {
+            return;
+        } else if (action == R.id.action_delete) {
             title = R.string.delete;
-        } else if (action == R.id.action_edit) {
+        } else if (action == R.id.photopage_bottom_control_delete) {
             title = R.string.delete;
-        } else if (action == R.id.action_edit) {
+        } else if (action == R.id.action_show_on_map) {
             title = R.string.show_on_map;
         } else {
             return;
