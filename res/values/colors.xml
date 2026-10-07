@@ -19,7 +19,7 @@
 
     <!-- configuration for album set page -->
     <color name="albumset_background">@color/lunaris_surface_container</color>
-    <color name="albumset_placeholder">@color/lunaris_surface_container_high</color>
+    <color name="albumset_placeholder">@color/lunaris_tile</color>
     <color name="albumset_label_background">@android:color/transparent</color>
     <color name="albumset_label_title">@color/lunaris_on_surface</color>
     <color name="albumset_label_count">@color/lunaris_on_surface_variant</color>
@@ -29,7 +29,7 @@
 
     <!-- configuration for album page -->
     <color name="album_background">@color/lunaris_surface_container</color>
-    <color name="album_placeholder">@color/lunaris_surface_container_high</color>
+    <color name="album_placeholder">@color/lunaris_tile</color>
 
     <!-- configuration for photo page -->
     <color name="photo_background">@color/black</color>

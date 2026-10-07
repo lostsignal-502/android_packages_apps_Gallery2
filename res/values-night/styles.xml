@@ -15,5 +15,7 @@
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <style name="ToolbarPopUpTheme" parent="@android:style/ThemeOverlay.Material" />
+    <style name="ToolbarPopUpTheme" parent="@android:style/ThemeOverlay.Material">
+        <item name="android:popupMenuStyle">@style/Lunaris.PopupMenu</item>
+    </style>
 </resources>

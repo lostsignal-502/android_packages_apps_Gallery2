@@ -8,5 +8,7 @@
 
     <style name="Lunaris.Base.Framework" parent="@android:style/Theme.DeviceDefault" />
 
-    <style name="Lunaris.Base.Framework.Dialog" parent="@android:style/Theme.DeviceDefault.Dialog.Alert" />
+    <style name="Lunaris.Base.Framework.Dialog" parent="@android:style/Theme.DeviceDefault.Dialog.Alert">
+        <item name="android:dialogCornerRadius">@dimen/lunaris_dialog_radius</item>
+    </style>
 </resources>

@@ -12,9 +12,11 @@
     <dimen name="lunaris_pill_label_size">13sp</dimen>
     <dimen name="lunaris_photo_controls_height">60dp</dimen>
     <dimen name="lunaris_photo_controls_item_width">72dp</dimen>
+    <dimen name="lunaris_dialog_radius">28dp</dimen>
+    <dimen name="lunaris_popup_radius">20dp</dimen>
     <dimen name="lunaris_check_badge_size">24dp</dimen>
     <dimen name="lunaris_check_badge_margin">8dp</dimen>
-    <fraction name="lunaris_photo_corner">8%</fraction>
-    <fraction name="lunaris_album_corner">12%</fraction>
+    <fraction name="lunaris_photo_corner">10%</fraction>
+    <fraction name="lunaris_album_corner">16%</fraction>
     <fraction name="lunaris_selected_scale">86%</fraction>
 </resources>

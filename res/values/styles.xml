@@ -326,6 +326,7 @@
         <item name="android:windowLightStatusBar">@bool/lunaris_light_bars</item>
         <item name="android:windowLightNavigationBar">@bool/lunaris_light_bars</item>
         <item name="android:alertDialogTheme">@style/Lunaris.Base.Framework.Dialog</item>
+        <item name="android:popupMenuStyle">@style/Lunaris.PopupMenu</item>
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowActionModeOverlay">true</item>
@@ -349,9 +350,12 @@
 
     <style name="ToolbarTitleStyle" parent="android:TextAppearance.Material.Widget.Toolbar.Title">
         <item name="android:textSize">@dimen/toolbar_title_text_size</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
-    <style name="ToolbarPopUpTheme" parent="@android:style/ThemeOverlay.Material.Light" />
+    <style name="ToolbarPopUpTheme" parent="@android:style/ThemeOverlay.Material.Light">
+        <item name="android:popupMenuStyle">@style/Lunaris.PopupMenu</item>
+    </style>
 
     <!-- Styles -->
     <style name="MyOverFlow" parent="@android:style/Widget.Material.ActionButton.Overflow">
