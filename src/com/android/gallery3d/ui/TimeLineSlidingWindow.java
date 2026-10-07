@@ -62,6 +62,7 @@ public class TimeLineSlidingWindow implements TimeLineDataLoader.DataListener {
     private final SynchronizedHandler mHandler;
     private final JobLimiter mThreadPool;
     private final TiledTexture.Uploader mTileUploader;
+    private final float mCorner;
 
     private int mSize;
     private int mSlotWidth;
@@ -91,6 +92,7 @@ public class TimeLineSlidingWindow implements TimeLineDataLoader.DataListener {
 
         mThreadPool = new JobLimiter(activity.getThreadPool(), JOB_LIMIT);
         mTileUploader = new TiledTexture.Uploader(activity.getGLRoot());
+        mCorner = LunarisTiles.photoCorner(activity.getAndroidContext());
         mTitleMaker = new TimeLineTitleMaker(activity.getAndroidContext(), labelSpec, slotView);
     }
 
@@ -304,7 +306,8 @@ public class TimeLineSlidingWindow implements TimeLineDataLoader.DataListener {
         protected Future<Bitmap> submitBitmapTask(FutureListener<Bitmap> l) {
             if (mItem.getMediaType() != MediaObject.MEDIA_TYPE_TIMELINE_TITLE) {
                 return mThreadPool.submit(
-                        mItem.requestImage(MediaItem.TYPE_MICROTHUMBNAIL), this);
+                        LunarisTiles.rounded(mItem.requestImage(MediaItem.TYPE_MICROTHUMBNAIL),
+                                mCorner), this);
             } else if( mItem.getMediaType() == MediaObject.MEDIA_TYPE_TIMELINE_TITLE ){
                 return mThreadPool.submit(
                         ((TimeLineTitleMediaItem) mItem).requestTitle(

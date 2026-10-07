@@ -83,6 +83,7 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
     private final SynchronizedHandler mHandler;
     private final JobLimiter mThreadPool;
     private final TiledTexture.Uploader mTileUploader;
+    private final float mCorner;
 
     private int mSize;
 
@@ -152,6 +153,7 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
             mLabelUploader = new TextureUploader(activity.getGLRoot());
         }
         mTileUploader = new TiledTexture.Uploader(activity.getGLRoot());
+        mCorner = LunarisTiles.photoCorner(activity.getAndroidContext());
         mActivity = activity;
 
     }
@@ -451,7 +453,8 @@ public class AlbumSlidingWindow implements AlbumDataLoader.DataListener {
         @Override
         protected Future<Bitmap> submitBitmapTask(FutureListener<Bitmap> l) {
             return mThreadPool.submit(
-                    mItem.requestImage(MediaItem.TYPE_MICROTHUMBNAIL), this);
+                    LunarisTiles.rounded(mItem.requestImage(MediaItem.TYPE_MICROTHUMBNAIL),
+                            mCorner), this);
         }
 
         @Override

@@ -21,10 +21,8 @@ import com.android.gallery3d.app.AbstractGalleryActivity;
 import com.android.gallery3d.app.AlbumSetDataLoader;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.Path;
-import com.android.gallery3d.glrenderer.ColorTexture;
 import com.android.gallery3d.glrenderer.FadeInTexture;
 import com.android.gallery3d.glrenderer.GLCanvas;
-import com.android.gallery3d.glrenderer.ResourceTexture;
 import com.android.gallery3d.glrenderer.Texture;
 import com.android.gallery3d.glrenderer.TiledTexture;
 import com.android.gallery3d.glrenderer.UploadedTexture;
@@ -36,8 +34,7 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
     private static final int CACHE_SIZE = 96;
     private final int mPlaceholderColor;
 
-    private final ColorTexture mWaitLoadingTexture;
-    private final ResourceTexture mCameraOverlay;
+    private final Texture mWaitLoadingTexture;
     private final AbstractGalleryActivity mActivity;
     private final SelectionManager mSelectionManager;
     protected final LabelSpec mLabelSpec;
@@ -77,10 +74,8 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
         mLabelSpec = labelSpec;
         mPlaceholderColor = placeholderColor;
 
-        mWaitLoadingTexture = new ColorTexture(mPlaceholderColor);
-        mWaitLoadingTexture.setSize(1, 1);
-        mCameraOverlay = new ResourceTexture(activity,
-                R.drawable.ic_cameraalbum_overlay);
+        setCorner(LunarisTiles.albumCorner(activity));
+        mWaitLoadingTexture = LunarisTiles.shape(mPlaceholderColor, getCorner());
     }
 
     public void setPressedIndex(int index) {
@@ -132,22 +127,17 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
     @Override
     public int renderSlot(GLCanvas canvas, int index, int pass, int width, int height) {
         AlbumSetEntry entry = mDataWindow.get(index);
+        int cover = Math.max(1, height - mLabelSpec.labelBackgroundHeight);
         int renderRequestFlags = 0;
-        renderRequestFlags |= renderContent(canvas, entry, width, height);
+        renderRequestFlags |= renderContent(canvas, entry, width, cover);
         renderRequestFlags |= renderLabel(canvas, entry, width, height);
-        renderRequestFlags |= renderOverlay(canvas, index, entry, width, height);
+        renderRequestFlags |= renderOverlay(canvas, index, entry, width, cover);
         return renderRequestFlags;
     }
 
     protected int renderOverlay(
             GLCanvas canvas, int index, AlbumSetEntry entry, int width, int height) {
         int renderRequestFlags = 0;
-        if (entry.album != null && entry.album.isCameraRoll()) {
-            int uncoveredHeight = height - mLabelSpec.labelBackgroundHeight;
-            int dim = uncoveredHeight / 2;
-            mCameraOverlay.draw(canvas, (width - dim) / 2,
-                    (uncoveredHeight - dim) / 2, dim, dim);
-        }
         if (mPressedIndex == index) {
             if (mAnimatePressedUp) {
                 drawPressedUpFrame(canvas, width, height);
@@ -159,10 +149,15 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
             } else {
                 drawPressedFrame(canvas, width, height);
             }
-        } else if ((mHighlightItemPath != null) && (mHighlightItemPath == entry.setPath)) {
+        }
+        if ((mHighlightItemPath != null) && (mHighlightItemPath == entry.setPath)) {
             drawSelectedFrame(canvas, width, height);
-        } else if (mInSelectionMode && mSelectionManager.isItemSelected(entry.setPath)) {
-            drawSelectedFrame(canvas, width, height);
+        } else if (mInSelectionMode) {
+            if (mSelectionManager.isItemSelected(entry.setPath)) {
+                drawSelectedFrame(canvas, width, height);
+            } else {
+                drawUnselectedFrame(canvas, width, height);
+            }
         }
         return renderRequestFlags;
     }
@@ -177,10 +172,12 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
             entry.isWaitLoadingDisplayed = true;
         } else if (entry.isWaitLoadingDisplayed) {
             entry.isWaitLoadingDisplayed = false;
-            content = new FadeInTexture(mPlaceholderColor, entry.bitmapTexture);
+            content = new FadeInTexture(mWaitLoadingTexture, entry.bitmapTexture);
             entry.content = content;
         }
-        drawContent(canvas, content, width, height, entry.rotation);
+        final boolean selected = mInSelectionMode
+                && mSelectionManager.isItemSelected(entry.setPath);
+        drawContent(canvas, content, width, height, entry.rotation, selected);
         if ((content instanceof FadeInTexture) &&
                 ((FadeInTexture) content).isAnimating()) {
             renderRequestFlags |= SlotView.RENDER_MORE_FRAME;
@@ -192,7 +189,7 @@ public class AlbumSetSlotRenderer extends AbstractSlotRenderer {
             GLCanvas canvas, AlbumSetEntry entry, int width, int height) {
         Texture content = checkLabelTexture(entry.labelTexture);
         if (content == null) {
-            content = mWaitLoadingTexture;
+            return 0;
         }
         int b = AlbumLabelMaker.getBorderSize();
         int h = mLabelSpec.labelBackgroundHeight;

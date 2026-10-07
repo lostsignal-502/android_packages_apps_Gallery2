@@ -24,7 +24,6 @@ import com.android.gallery3d.app.AlbumDataLoader;
 import com.android.gallery3d.app.AlbumPage;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.Path;
-import com.android.gallery3d.glrenderer.ColorTexture;
 import com.android.gallery3d.glrenderer.FadeInTexture;
 import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.glrenderer.Texture;
@@ -57,7 +56,7 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
 
     private AlbumSlidingWindow mDataWindow;
     private final AbstractGalleryActivity mActivity;
-    private final ColorTexture mWaitLoadingTexture;
+    private final Texture mWaitLoadingTexture;
     private SlotView mSlotView;
     private final SelectionManager mSelectionManager;
 
@@ -79,8 +78,7 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
         mSelectionManager = selectionManager;
         mPlaceholderColor = placeholderColor;
         mLabelSpec = labelSpec;
-        mWaitLoadingTexture = new ColorTexture(mPlaceholderColor);
-        mWaitLoadingTexture.setSize(1, 1);
+        mWaitLoadingTexture = LunarisTiles.shape(mPlaceholderColor, getCorner());
         mIsGridViewShown = viewType;
     }
 
@@ -145,11 +143,13 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
             entry.isWaitDisplayed = true;
         } else if (entry.isWaitDisplayed) {
             entry.isWaitDisplayed = false;
-            content = new FadeInTexture(mPlaceholderColor, entry.bitmapTexture);
+            content = new FadeInTexture(mWaitLoadingTexture, entry.bitmapTexture);
             entry.content = content;
         }
+        final boolean selected = mInSelectionMode && entry.path != null
+                && mSelectionManager.isItemSelected(entry.path);
         if (mIsGridViewShown) {
-            drawContent(canvas, content, width, height, entry.rotation);
+            drawContent(canvas, content, width, height, entry.rotation, selected);
         } else {
             // In List View, the content is always rendered in to the largest square that fits
             // inside the slot, aligned to the top of the slot.
@@ -186,7 +186,7 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
             int height) {
         Texture content = checkLabelTexture(entry.labelTexture);
         if (content == null) {
-            content = mWaitLoadingTexture;
+            return 0;
         }
         int b = AlbumLabelMaker.getBorderSize();
         int h = mLabelSpec.labelBackgroundHeight;
@@ -209,11 +209,15 @@ public class AlbumSlotRenderer extends AbstractSlotRenderer {
             } else {
                 drawPressedFrame(canvas, width, height);
             }
-        } else if ((entry.path != null) && (mHighlightItemPath == entry.path)) {
+        }
+        if ((entry.path != null) && (mHighlightItemPath == entry.path)) {
             drawSelectedFrame(canvas, width, height);
-        } else if (mInSelectionMode
-                && mSelectionManager.isItemSelected(entry.path)) {
-            drawSelectedFrame(canvas, width, height);
+        } else if (mInSelectionMode) {
+            if (mSelectionManager.isItemSelected(entry.path)) {
+                drawSelectedFrame(canvas, width, height);
+            } else {
+                drawUnselectedFrame(canvas, width, height);
+            }
         }
         return renderRequestFlags;
     }

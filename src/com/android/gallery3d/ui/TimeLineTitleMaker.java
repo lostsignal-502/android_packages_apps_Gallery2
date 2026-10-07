@@ -55,7 +55,7 @@ public class TimeLineTitleMaker {
         mSpec = spec;
         mTimeLineSlotView = slotView;
         mTitlePaint = getTextPaint(spec.timeLineTitleFontSize, spec.timeLineTitleTextColor , true);
-        mCountPaint = getTextPaint(spec.timeLineTitleFontSize, spec.timeLineNumberTextColor, true);
+        mCountPaint = getTextPaint(spec.timeLineCountFontSize, spec.timeLineNumberTextColor, false);
         TIMELINETITLE_START_X = context.getResources().getDimensionPixelSize(
                 R.dimen.timeline_title_margin);
     }
@@ -68,7 +68,7 @@ public class TimeLineTitleMaker {
         paint.setColor(color);
         paint.setTypeface(Typeface.SANS_SERIF);
         if (isBold) {
-            paint.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            paint.setTypeface(Typeface.create(Typeface.DEFAULT, 700, false));
         }
         return paint;
     }
@@ -144,7 +144,6 @@ public class TimeLineTitleMaker {
             int x;
             int y = 0;
             if (mTitle != null) {
-                mTitle = mTitle.toUpperCase();
                 x = TIMELINETITLE_START_X;
                 y = (height - spec.timeLineTitleFontSize)/2;
                 // re-calculate x for RTL
@@ -165,7 +164,7 @@ public class TimeLineTitleMaker {
                 mCountPaint.getTextBounds(
                         countString, 0, countString.length(), mediaCountBounds);
                 int w = mediaCountBounds.width();
-                y = (height - spec.timeLineTitleFontSize)/2;
+                y = (height - spec.timeLineCountFontSize)/2;
                 x = width - TIMELINETITLE_START_X - w;
                 // re-calculate x for RTL
                 if (View.LAYOUT_DIRECTION_RTL == TextUtils

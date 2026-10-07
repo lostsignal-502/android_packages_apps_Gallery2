@@ -27,6 +27,20 @@ import com.android.gallery3d.ui.TimeLineSlotRenderer;
 import com.android.gallery3d.ui.TimeLineSlotView;
 
 final class Config {
+    private static int sThemeKey;
+
+    private static synchronized void dropIfStale(Context context) {
+        final int key = 31 * context.getResources().getConfiguration().uiMode
+                + context.getColor(R.color.lunaris_primary);
+        if (key == sThemeKey) return;
+        sThemeKey = key;
+        AlbumSetPage.sInstance = null;
+        AlbumPage.sInstance = null;
+        ManageCachePage.sInstance = null;
+        AlbumPageList.sInstance = null;
+        TimeLinePage.sInstance = null;
+    }
+
     public static class AlbumSetPage {
         private static AlbumSetPage sInstance;
 
@@ -43,6 +57,7 @@ final class Config {
         public int paddingRightLand;
 
         public static synchronized AlbumSetPage get(Context context) {
+            dropIfStale(context);
             if (sInstance == null) {
                 sInstance = new AlbumSetPage(context);
             }
@@ -61,7 +76,8 @@ final class Config {
             slotViewSpec.colsPort = r.getInteger(R.integer.albumset_cols_port);
             slotViewSpec.slotGap = r.getDimensionPixelSize(R.dimen.albumset_slot_gap);
             slotViewSpec.slotGapLand = r.getDimensionPixelSize(R.dimen.albumset_slot_gap_land);
-            slotViewSpec.slotHeightAdditional = 0;
+            slotViewSpec.slotHeightAdditional = r.getDimensionPixelSize(
+                    R.dimen.albumset_label_background_height);
             slotViewSpec.slotWidth = r.getDimensionPixelSize(R.dimen.slot_width);
             slotViewSpec.slotHeight = r.getDimensionPixelSize(R.dimen.slot_height);
 
@@ -79,10 +95,10 @@ final class Config {
             labelSpec = new AlbumSetSlotRenderer.LabelSpec();
             labelSpec.labelBackgroundHeight = r.getDimensionPixelSize(
                     R.dimen.albumset_label_background_height);
-            /*labelSpec.titleOffset = r.getDimensionPixelSize(
+            labelSpec.titleOffset = r.getDimensionPixelSize(
                     R.dimen.albumset_title_offset);
             labelSpec.countOffset = r.getDimensionPixelSize(
-                    R.dimen.albumset_count_offset);*/
+                    R.dimen.albumset_count_offset);
             labelSpec.titleFontSize = r.getDimensionPixelSize(
                     R.dimen.albumset_title_font_size);
             labelSpec.countFontSize = r.getDimensionPixelSize(
@@ -119,6 +135,7 @@ final class Config {
         public int paddingRightLand;
 
         public static synchronized AlbumPage get(Context context) {
+            dropIfStale(context);
             if (sInstance == null) {
                 sInstance = new AlbumPage(context);
             }
@@ -161,6 +178,7 @@ final class Config {
         public final int cachePinMargin;
 
         public static synchronized ManageCachePage get(Context context) {
+            dropIfStale(context);
             if (sInstance == null) {
                 sInstance = new ManageCachePage(context);
             }
@@ -187,6 +205,7 @@ final class Config {
         public int placeholderColor;
 
         public static synchronized AlbumPageList get(Context context) {
+            dropIfStale(context);
             if (sInstance == null) {
                 sInstance = new AlbumPageList(context);
             }
@@ -236,6 +255,7 @@ final class Config {
         public int placeholderColor;
 
         public static synchronized TimeLinePage get(Context context) {
+            dropIfStale(context);
             if (sInstance == null) {
                 sInstance = new TimeLinePage(context);
             }
@@ -259,6 +279,8 @@ final class Config {
                     R.dimen.timeline_title_height);
             labelSpec.timeLineTitleFontSize = r.getDimensionPixelSize(
                     R.dimen.timeline_title_font_size);
+            labelSpec.timeLineCountFontSize = r.getDimensionPixelSize(
+                    R.dimen.timeline_count_font_size);
             labelSpec.timeLineTitleTextColor = r.getColor(R.color.timeline_title_text_color);
             labelSpec.timeLineNumberTextColor = r.getColor(R.color.timeline_title_number_text_color);
             labelSpec.timeLineTitleBackgroundColor = r.getColor(R.color.timeline_title_background_color);

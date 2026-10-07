@@ -496,8 +496,8 @@ public class SlotView extends GLView {
             if (mSpec.slotWidth != -1) {
                 mSlotGap = (mWidth > mHeight) ? mSpec.slotGapLand : mSpec.slotGap;
                 int cols = (mWidth > mHeight) ? mSpec.colsLand : mSpec.colsPort;
-                mSlotHeight = Math.max(1, (mWidth - (cols - 1) * mSlotGap) / cols) ;
-                mSlotWidth = mSlotHeight ;//mSpec.slotWidth;
+                mSlotWidth = Math.max(1, (mWidth - (cols - 1) * mSlotGap) / cols);
+                mSlotHeight = mSlotWidth + mSpec.slotHeightAdditional;
             } else {
                 mSlotGap = (mWidth > mHeight) ? mSpec.slotGapLand : mSpec.slotGap;;
                 mSlotHeight = mSpec.slotHeight;//Math.max(1, (mHeight - (rows - 1) * mSlotGap) / rows);

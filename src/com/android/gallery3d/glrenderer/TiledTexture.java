@@ -113,6 +113,10 @@ public class TiledTexture implements Texture {
         public int contentWidth;
         public int contentHeight;
 
+        Tile() {
+            setOpaque(false);
+        }
+
         @Override
         public void setSize(int width, int height) {
             contentWidth = width;

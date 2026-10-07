@@ -21,9 +21,9 @@ import android.graphics.Rect;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.data.MediaObject;
+import com.android.gallery3d.glrenderer.BitmapTexture;
 import com.android.gallery3d.glrenderer.FadeOutTexture;
 import com.android.gallery3d.glrenderer.GLCanvas;
-import com.android.gallery3d.glrenderer.NinePatchTexture;
 import com.android.gallery3d.glrenderer.ResourceTexture;
 import com.android.gallery3d.glrenderer.Texture;
 
@@ -32,20 +32,59 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
     private final ResourceTexture mVideoOverlay;
     private final ResourceTexture mVideoPlayIcon;
     private final ResourceTexture mPanoramaIcon;
-    private final NinePatchTexture mFramePressed;
-    private final NinePatchTexture mFrameSelected;
     private final ResourceTexture mDrmIcon;
-    private final ResourceTexture mSelectionIcon;
+    private final BitmapTexture mCheckedBadge;
+    private final BitmapTexture mUncheckedBadge;
+    private final int mBadgeMargin;
+    private final float mSelectedScale;
+    private final int mPressedColor;
+    private final Context mContext;
+    private BitmapTexture mFramePressed;
     private FadeOutTexture mFramePressedUp;
+    private float mCorner;
 
     protected AbstractSlotRenderer(Context context) {
+        mContext = context;
         mVideoOverlay = new ResourceTexture(context, R.drawable.ic_video_thumb);
         mVideoPlayIcon = new ResourceTexture(context, R.drawable.play_detail);
         mPanoramaIcon = new ResourceTexture(context, R.drawable.ic_360pano_holo_light);
-        mFramePressed = new NinePatchTexture(context, R.drawable.grid_pressed);
-        mFrameSelected = new NinePatchTexture(context, R.drawable.grid_selected);
         mDrmIcon = new ResourceTexture(context, R.drawable.drm_image);
-        mSelectionIcon = new ResourceTexture(context, R.drawable.multiselect);
+        mCheckedBadge = LunarisTiles.checkBadge(context, true);
+        mUncheckedBadge = LunarisTiles.checkBadge(context, false);
+        mBadgeMargin = context.getResources().getDimensionPixelSize(
+                R.dimen.lunaris_check_badge_margin);
+        mSelectedScale = context.getResources().getFraction(
+                R.fraction.lunaris_selected_scale, 1, 1);
+        mPressedColor = context.getColor(R.color.lunaris_pressed_overlay);
+        setCorner(LunarisTiles.photoCorner(context));
+    }
+
+    protected void setCorner(float corner) {
+        mCorner = corner;
+        mFramePressed = LunarisTiles.shape(mPressedColor, corner);
+        mFramePressedUp = null;
+    }
+
+    protected float getCorner() {
+        return mCorner;
+    }
+
+    protected Context getContext() {
+        return mContext;
+    }
+
+    protected void drawContent(GLCanvas canvas, Texture content, int width, int height,
+            int rotation, boolean selected) {
+        if (!selected) {
+            drawContent(canvas, content, width, height, rotation);
+            return;
+        }
+        canvas.save(GLCanvas.SAVE_FLAG_MATRIX);
+        canvas.translate(width * (1f - mSelectedScale) / 2f,
+                height * (1f - mSelectedScale) / 2f);
+        canvas.scale(mSelectedScale, mSelectedScale, 1);
+        drawContent(canvas, content, width, height, rotation);
+        canvas.restore();
     }
 
     protected void drawContent(GLCanvas canvas,
@@ -123,16 +162,19 @@ public abstract class AbstractSlotRenderer implements SlotView.SlotRenderer {
         if (mFramePressedUp == null) {
             mFramePressedUp = new FadeOutTexture(mFramePressed);
         }
-        drawFrame(canvas, mFramePressed.getPaddings(), mFramePressedUp, 0, 0, width, height);
+        mFramePressedUp.draw(canvas, 0, 0, width, height);
     }
 
     protected void drawPressedFrame(GLCanvas canvas, int width, int height) {
-        drawFrame(canvas, mFramePressed.getPaddings(), mFramePressed, 0, 0, width, height);
+        mFramePressed.draw(canvas, 0, 0, width, height);
     }
 
     protected void drawSelectedFrame(GLCanvas canvas, int width, int height) {
-        mSelectionIcon.draw(canvas, 5, 5);
-        //drawFrame(canvas, mFrameSelected.getPaddings(), mFrameSelected, 0, 0, width, height);
+        mCheckedBadge.draw(canvas, mBadgeMargin, mBadgeMargin);
+    }
+
+    protected void drawUnselectedFrame(GLCanvas canvas, int width, int height) {
+        mUncheckedBadge.draw(canvas, mBadgeMargin, mBadgeMargin);
     }
 
     protected static void drawFrame(GLCanvas canvas, Rect padding, Texture frame,

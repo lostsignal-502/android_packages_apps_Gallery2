@@ -59,6 +59,7 @@ public class AlbumLabelMaker {
         mContext = context;
         mSpec = spec;
         mTitlePaint = getTextPaint(spec.titleFontSize, spec.titleColor, false);
+        mTitlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, 600, false));
         mCountPaint = getTextPaint(spec.countFontSize, spec.countColor, false);
 
         /*mLocalSetIcon = new LazyLoadedBitmap(R.drawable.frame_overlay_gallery_folder);
@@ -151,6 +152,26 @@ public class AlbumLabelMaker {
         }
     }
 
+    private void drawCoverLabel(Canvas canvas, int labelWidth, String title, String count,
+            boolean rtl) {
+        final AlbumSetSlotRenderer.LabelSpec s = mSpec;
+        final int limit = labelWidth - 2 * s.titleLeftMargin;
+        drawAligned(canvas, labelWidth, s.titleOffset, title, limit, mTitlePaint, rtl);
+        if (count != null) {
+            drawAligned(canvas, labelWidth, s.countOffset, count, limit, mCountPaint, rtl);
+        }
+    }
+
+    private void drawAligned(Canvas canvas, int labelWidth, int y, String text, int limit,
+            TextPaint p, boolean rtl) {
+        synchronized (p) {
+            text = TextUtils.ellipsize(text, p, limit, TextUtils.TruncateAt.END).toString();
+            final int x = rtl ? labelWidth - mSpec.titleLeftMargin - (int) p.measureText(text)
+                    : mSpec.titleLeftMargin;
+            canvas.drawText(text, x, y - p.getFontMetricsInt().ascent, p);
+        }
+    }
+
     private class AlbumLabelJob implements ThreadPool.Job<Bitmap> {
         private final String mTitle;
         private String mCount;
@@ -216,17 +237,7 @@ public class AlbumLabelMaker {
                 if (jc.isCancelled()) return null;
                 int strLength = (int) mTitlePaint.measureText(title);
                 if (!isAlbumListViewShown) {
-                    int x = labelWidth - s.leftMargin - strLength;
-                    // TODO: is the offset relevant in new reskin?
-                    // int y = s.titleOffset;
-                    int y = (s.labelBackgroundHeight - s.titleFontSize) / 2;
-                    drawText(canvas, x, y, title, labelWidth - s.leftMargin - x, mTitlePaint);
-
-                    // draw count
-                    if (jc.isCancelled()) return null;
-                    x = s.leftMargin + 10;// plus 10 to get a much bigger margin
-                    y = (s.labelBackgroundHeight - s.countFontSize) / 2;
-                    drawText(canvas, x, y, count, labelWidth - x, mCountPaint);
+                    drawCoverLabel(canvas, labelWidth, title, count, true);
                 } else {
                     int x = labelWidth
                             - (s1.leftMargin + s1.iconSize)
@@ -243,19 +254,7 @@ public class AlbumLabelMaker {
                 if (jc.isCancelled())
                     return null;
                 if (!isAlbumListViewShown) {
-                    int x = s.leftMargin + s.titleLeftMargin;
-                    // TODO: is the offset relevant in new reskin?
-                    // int y = s.titleOffset;
-                    int y = (s.labelBackgroundHeight - s.titleFontSize) / 2;
-                    drawText(canvas, x, y, title, labelWidth - s.leftMargin - x
-                            - s.titleRightMargin - s.countRightMargin, mTitlePaint);
-
-                    // draw count
-                    if (jc.isCancelled())
-                        return null;
-                    x = labelWidth - s.titleRightMargin - s.countRightMargin;
-                    y = (s.labelBackgroundHeight - s.countFontSize) / 2;
-                    drawText(canvas, x, y, count, labelWidth - x, mCountPaint);
+                    drawCoverLabel(canvas, labelWidth, title, count, false);
                 } else {
 
                     int x = s1.leftMargin + s1.iconSize;

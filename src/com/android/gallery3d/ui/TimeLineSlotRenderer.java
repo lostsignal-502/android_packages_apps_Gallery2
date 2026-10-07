@@ -22,7 +22,6 @@ import com.android.gallery3d.app.TimeLineDataLoader;
 import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaObject;
 import com.android.gallery3d.data.Path;
-import com.android.gallery3d.glrenderer.ColorTexture;
 import com.android.gallery3d.glrenderer.GLCanvas;
 import com.android.gallery3d.glrenderer.Texture;
 import com.android.gallery3d.glrenderer.TiledTexture;
@@ -37,7 +36,7 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
 
     private TimeLineSlidingWindow mDataWindow;
     private final AbstractGalleryActivity mActivity;
-    private final ColorTexture mWaitLoadingTexture;
+    private final Texture mWaitLoadingTexture;
     private final TimeLineSlotView mSlotView;
     private final SelectionManager mSelectionManager;
 
@@ -53,6 +52,7 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
 
         public int timeLineTitleHeight;
         public int timeLineTitleFontSize;
+        public int timeLineCountFontSize;
         public int timeLineTitleTextColor;
         public int timeLineNumberTextColor;
         public int timeLineTitleBackgroundColor;
@@ -66,8 +66,7 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
         mLabelSpec = labelSpec;
         mSelectionManager = selectionManager;
         mPlaceholderColor = placeholderColor;
-        mWaitLoadingTexture = new ColorTexture(mPlaceholderColor);
-        mWaitLoadingTexture.setSize(1, 1);
+        mWaitLoadingTexture = LunarisTiles.shape(mPlaceholderColor, getCorner());
 
     }
 
@@ -110,11 +109,18 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
             } else {
                 drawPressedFrame(canvas, width, height);
             }
-        } else if ((entry.path != null) && (mHighlightItemPath == entry.path)) {
+        }
+        if (entry.mediaType == MediaItem.MEDIA_TYPE_TIMELINE_TITLE) {
+            return renderRequestFlags;
+        }
+        if ((entry.path != null) && (mHighlightItemPath == entry.path)) {
             drawSelectedFrame(canvas, width, height);
-        } else if (mInSelectionMode && entry.mediaType != MediaItem.MEDIA_TYPE_TIMELINE_TITLE
-                && mSelectionManager.isItemSelected(entry.path)) {
-            drawSelectedFrame(canvas, width, height);
+        } else if (mInSelectionMode) {
+            if (mSelectionManager.isItemSelected(entry.path)) {
+                drawSelectedFrame(canvas, width, height);
+            } else {
+                drawUnselectedFrame(canvas, width, height);
+            }
         }
         return renderRequestFlags;
     }
@@ -182,14 +188,19 @@ public class TimeLineSlotRenderer extends AbstractSlotRenderer {
         TimeLineSlidingWindow.AlbumEntry entry = mDataWindow.get(index);
         int renderRequestFlags = 0;
         if (entry != null) {
+            final boolean title = entry.mediaType == MediaItem.MEDIA_TYPE_TIMELINE_TITLE;
             Texture content = checkContentTexture(entry.content);
             if (content == null) {
-                content = mWaitLoadingTexture;
+                content = title ? null : mWaitLoadingTexture;
                 entry.isWaitDisplayed = true;
             } else if (entry.isWaitDisplayed) {
                 entry.isWaitDisplayed = false;
             }
-            drawContent(canvas, content, width, height, entry.rotation);
+            if (content != null) {
+                final boolean selected = mInSelectionMode && !title && entry.path != null
+                        && mSelectionManager.isItemSelected(entry.path);
+                drawContent(canvas, content, width, height, entry.rotation, selected);
+            }
 
             if (entry.mediaType == MediaObject.MEDIA_TYPE_VIDEO) {
                 drawVideoOverlay(canvas, width, height, true, 0);

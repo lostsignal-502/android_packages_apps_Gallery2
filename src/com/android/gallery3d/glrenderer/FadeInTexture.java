@@ -17,25 +17,33 @@
 package com.android.gallery3d.glrenderer;
 
 
-// FadeInTexture is a texture which begins with a color, then gradually animates
+// FadeInTexture is a texture which begins with a placeholder, then gradually animates
 // into a given texture.
 public class FadeInTexture extends FadeTexture implements Texture {
     @SuppressWarnings("unused")
     private static final String TAG = "FadeInTexture";
 
-    private final int mColor;
+    private final Texture mPlaceholder;
     private final TiledTexture mTexture;
 
-    public FadeInTexture(int color, TiledTexture texture) {
+    public FadeInTexture(Texture placeholder, TiledTexture texture) {
         super(texture.getWidth(), texture.getHeight(), texture.isOpaque());
-        mColor = color;
+        mPlaceholder = placeholder;
         mTexture = texture;
     }
 
     @Override
     public void draw(GLCanvas canvas, int x, int y, int w, int h) {
         if (isAnimating()) {
-            mTexture.drawMixed(canvas, mColor, getRatio(), x, y, w, h);
+            final float ratio = getRatio();
+            canvas.save(GLCanvas.SAVE_FLAG_ALPHA);
+            canvas.multiplyAlpha(ratio);
+            mPlaceholder.draw(canvas, x, y, w, h);
+            canvas.restore();
+            canvas.save(GLCanvas.SAVE_FLAG_ALPHA);
+            canvas.multiplyAlpha(1f - ratio);
+            mTexture.draw(canvas, x, y, w, h);
+            canvas.restore();
         } else {
             mTexture.draw(canvas, x, y, w, h);
         }
