@@ -23,7 +23,7 @@
         <item name="switchStyle">@android:style/Widget.CompoundButton</item>
     </style>
 
-    <style name="Theme.Gallery.Dialog" parent="android:Theme.Material.Dialog" />
+    <style name="Theme.Gallery.Dialog" parent="Lunaris.Base.Framework.Dialog" />
 
     <style name="Theme.Gallery" parent="android:Theme.Material.Light">
         <item name="android:colorPrimary">@color/primary</item>
@@ -320,8 +320,12 @@
     <style name="AppTheme" parent="Theme.AppCompat.DayNight">
         <item name="android:windowDisablePreview">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:windowBackground">@android:color/black</item>
-        <item name="android:statusBarColor">#212121</item>
+        <item name="android:windowBackground">@color/lunaris_surface_container</item>
+        <item name="android:statusBarColor">@color/lunaris_surface_container</item>
+        <item name="android:navigationBarColor">@color/lunaris_surface_container</item>
+        <item name="android:windowLightStatusBar">@bool/lunaris_light_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/lunaris_light_bars</item>
+        <item name="android:alertDialogTheme">@style/Lunaris.Base.Framework.Dialog</item>
         <item name="android:windowTranslucentNavigation">false</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowActionModeOverlay">true</item>
@@ -337,7 +341,7 @@
         <item name="android:statusBarColor">#ab5810</item>
     </style>
 
-    <style name="ToolbarTheme" parent="android:Theme.Material" >
+    <style name="ToolbarTheme" parent="android:Theme.DeviceDefault.DayNight" >
         <item name="android:actionOverflowButtonStyle">@style/WhiteOverflow</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 Lunaris-AOSP
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <bool name="lunaris_light_bars">false</bool>
+
+    <style name="Lunaris.Base.Framework" parent="@android:style/Theme.DeviceDefault" />
+
+    <style name="Lunaris.Base.Framework.Dialog" parent="@android:style/Theme.DeviceDefault.Dialog.Alert" />
+</resources>

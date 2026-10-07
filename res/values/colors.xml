@@ -15,21 +15,21 @@
 -->
 <resources>
 
-    <color name="default_background">@color/white</color>
+    <color name="default_background">@color/lunaris_surface_container</color>
 
     <!-- configuration for album set page -->
-    <color name="albumset_background">@color/white</color>
-    <color name="albumset_placeholder">@color/black_transparent_3</color>
+    <color name="albumset_background">@color/lunaris_surface_container</color>
+    <color name="albumset_placeholder">@color/lunaris_surface_container_high</color>
     <color name="albumset_label_background">@color/black_transparent_4</color>
     <color name="albumset_label_title">@color/white</color>
     <color name="albumset_label_count">@color/white</color>
-    <color name="albumlist_label_title">@color/black_transparent_4</color>
+    <color name="albumlist_label_title">@color/lunaris_on_surface</color>
 
     <color name="darker_transparent">@color/black_transparent_5</color>
 
     <!-- configuration for album page -->
-    <color name="album_background">@color/white</color>
-    <color name="album_placeholder">@color/white</color>
+    <color name="album_background">@color/lunaris_surface_container</color>
+    <color name="album_placeholder">@color/lunaris_surface_container_high</color>
 
     <!-- configuration for photo page -->
     <color name="photo_background">@color/black</color>
@@ -38,7 +38,7 @@
     <color name="photo_page_bottom_panel">#8A000000</color>
 
     <!-- configuration for manage cache page -->
-    <color name="cache_background">@color/primary</color>
+    <color name="cache_background">@color/lunaris_surface_container</color>
     <color name="cache_placeholder">@color/light_black</color>
 
     <color name="bitmap_screennail_placeholder">@color/light_black</color>
@@ -81,20 +81,20 @@
     <color name="grey">#e7e7e7</color>
     <color name="disabled_knob">#575757</color>
     <color name="toolbar_theme">@color/primary</color>
-    <color name="multiselect_background">@color/white</color>
+    <color name="multiselect_background">@color/lunaris_surface_container</color>
     <color name="edit_background">@color/black</color>
     <color name="edit_actionbar_background">@color/black</color>
-    <color name="dialog_button_color">#009688</color>
-    <color name="timeline_title_text_color">@color/black_transparent_4</color>
-    <color name="timeline_title_number_text_color">@color/black_transparent_3</color>
-    <color name="timeline_title_background_color">@color/white</color>
+    <color name="dialog_button_color">@color/lunaris_primary</color>
+    <color name="timeline_title_text_color">@color/lunaris_on_surface</color>
+    <color name="timeline_title_number_text_color">@color/lunaris_on_surface_variant</color>
+    <color name="timeline_title_background_color">@color/lunaris_surface_container</color>
 
-    <color name="navigation_accent_disabled">#747474</color>
-    <color name="navigation_accent_enabled">@color/white</color>
+    <color name="navigation_accent_disabled">@color/lunaris_on_surface_variant</color>
+    <color name="navigation_accent_enabled">@color/lunaris_on_surface</color>
 
-    <color name="details_text_color">@color/black_transparent_4</color>
-    <color name="empty_text">@color/black_transparent_4</color>
+    <color name="details_text_color">@color/lunaris_on_surface_variant</color>
+    <color name="empty_text">@color/lunaris_on_surface_variant</color>
 
-    <color name="multiselect_action_text_color">@color/black_transparent_4</color>
-    <color name="multiselect_icon_color">@color/black</color>
+    <color name="multiselect_action_text_color">@color/lunaris_on_surface</color>
+    <color name="multiselect_icon_color">@color/lunaris_on_surface</color>
 </resources>
