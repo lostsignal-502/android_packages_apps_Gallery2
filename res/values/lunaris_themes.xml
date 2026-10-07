@@ -10,5 +10,10 @@
 
     <style name="Lunaris.Base.Framework.Dialog" parent="@android:style/Theme.DeviceDefault.Light.Dialog.Alert">
         <item name="android:dialogCornerRadius">@dimen/lunaris_dialog_radius</item>
+        <item name="android:windowBackground">@drawable/lunaris_dialog_bg</item>
+        <item name="android:windowBackgroundBlurRadius">@dimen/lunaris_dialog_blur_radius</item>
+        <item name="android:windowBlurBehindEnabled">true</item>
+        <item name="android:windowBlurBehindRadius">@dimen/lunaris_blur_behind_radius</item>
+        <item name="android:backgroundDimAmount">0.32</item>
     </style>
 </resources>

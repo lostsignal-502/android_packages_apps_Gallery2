@@ -13,6 +13,8 @@
     <dimen name="lunaris_photo_controls_height">60dp</dimen>
     <dimen name="lunaris_photo_controls_item_width">72dp</dimen>
     <dimen name="lunaris_dialog_radius">28dp</dimen>
+    <dimen name="lunaris_blur_behind_radius">16dp</dimen>
+    <dimen name="lunaris_dialog_blur_radius">40dp</dimen>
     <dimen name="lunaris_popup_radius">20dp</dimen>
     <dimen name="lunaris_check_badge_size">24dp</dimen>
     <dimen name="lunaris_check_badge_margin">8dp</dimen>
