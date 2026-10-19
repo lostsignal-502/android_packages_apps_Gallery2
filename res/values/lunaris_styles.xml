@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 Lunaris-AOSP
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <style name="Lunaris.PillItem" parent="">
+        <item name="android:layout_width">@dimen/lunaris_pill_item_width</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/lunaris_pill_item_ripple</item>
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:drawableTint">@color/lunaris_pill_item</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:gravity">center</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:textColor">@color/lunaris_pill_item</item>
+        <item name="android:textSize">@dimen/lunaris_pill_label_size</item>
+    </style>
+
+    <style name="Lunaris.PhotoControl" parent="">
+        <item name="android:layout_width">@dimen/lunaris_photo_controls_item_width</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/lunaris_pill_item_ripple</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:stateListAnimator">@animator/lunaris_press_scale</item>
+    </style>
+</resources>

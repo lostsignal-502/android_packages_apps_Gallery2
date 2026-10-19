@@ -28,44 +28,55 @@
   IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawerLayout"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/gallery_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/gallery_root"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/bottom_navigation">
+        <!-- Toolbar -->
+        <include layout="@layout/toolbar" />
 
-            <!-- Toolbar -->
-            <include layout="@layout/toolbar" />
-
-            <!-- Main content -->
-            <include layout="@layout/gl_root_group" />
-
-        </RelativeLayout>
-
-        <!-- Bottom bar -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primary"
-            android:layout_alignParentBottom="true"
-            app:menu="@menu/navigation_items"
-            app:itemIconTint="@drawable/item_bg"
-            app:itemTextColor="@drawable/item_bg" />
+        <!-- Main content -->
+        <include layout="@layout/gl_root_group" />
 
     </RelativeLayout>
 
-</LinearLayout>
+    <com.android.gallery3d.ui.PillNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/lunaris_pill_height"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/lunaris_pill_margin"
+        android:background="@drawable/lunaris_pill_bg"
+        android:elevation="6dp"
+        android:orientation="horizontal"
+        android:padding="@dimen/lunaris_pill_padding">
+
+        <TextView
+            android:id="@+id/action_timeline"
+            style="@style/Lunaris.PillItem"
+            android:drawableTop="@drawable/lunaris_ic_photos"
+            android:text="@string/timeline_title" />
+
+        <TextView
+            android:id="@+id/action_album"
+            style="@style/Lunaris.PillItem"
+            android:drawableTop="@drawable/lunaris_ic_albums"
+            android:text="@string/albums_title" />
+
+        <TextView
+            android:id="@+id/action_videos"
+            style="@style/Lunaris.PillItem"
+            android:drawableTop="@drawable/lunaris_ic_videos"
+            android:text="@string/videos_title" />
+
+    </com.android.gallery3d.ui.PillNavigationView>
+
+</RelativeLayout>

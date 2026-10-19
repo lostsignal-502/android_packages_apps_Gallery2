@@ -115,11 +115,11 @@
     <integer name="albumset_cols_land">3</integer>
     <integer name="albumset_cols_port">2</integer>
 
-    <dimen name="albumset_padding_top">4dp</dimen>
-    <dimen name="albumset_padding_bottom">4dp</dimen>
-    <dimen name="albumset_padding_left">4dp</dimen>
-    <dimen name="albumset_padding_right">4dp</dimen>
-    <dimen name="albumset_slot_gap">4dp</dimen>
+    <dimen name="albumset_padding_top">12dp</dimen>
+    <dimen name="albumset_padding_bottom">12dp</dimen>
+    <dimen name="albumset_padding_left">12dp</dimen>
+    <dimen name="albumset_padding_right">12dp</dimen>
+    <dimen name="albumset_slot_gap">8dp</dimen>
     <dimen name="albumset_label_background_height">48dp</dimen>
     <dimen name="albumset_title_offset">12dp</dimen>
     <dimen name="albumset_count_offset">18dp</dimen>
@@ -132,11 +132,11 @@
     <dimen name="albumset_icon_size">25dp</dimen>
 
       <!-- configuration for albumset page in Landscape-->
-    <dimen name="albumset_slot_gap_land">4dp</dimen>
-    <dimen name="albumset_padding_top_land">4dp</dimen>
-    <dimen name="albumset_padding_bottom_land">4dp</dimen>
-    <dimen name="albumset_padding_left_land">4dp</dimen>
-    <dimen name="albumset_padding_right_land">4dp</dimen>
+    <dimen name="albumset_slot_gap_land">8dp</dimen>
+    <dimen name="albumset_padding_top_land">12dp</dimen>
+    <dimen name="albumset_padding_bottom_land">12dp</dimen>
+    <dimen name="albumset_padding_left_land">12dp</dimen>
+    <dimen name="albumset_padding_right_land">12dp</dimen>
 
     <!-- configuration for album page -->
     <integer name="album_rows_land">2</integer>
@@ -144,18 +144,18 @@
     <integer name="album_cols_land">5</integer>
     <integer name="album_cols_port">3</integer>
 
-    <dimen name="album_slot_gap">3dp</dimen>
-    <dimen name="album_padding_top">3dp</dimen>
-    <dimen name="album_padding_bottom">3dp</dimen>
-    <dimen name="album_padding_left">3dp</dimen>
-    <dimen name="album_padding_right">3dp</dimen>
+    <dimen name="album_slot_gap">4dp</dimen>
+    <dimen name="album_padding_top">8dp</dimen>
+    <dimen name="album_padding_bottom">8dp</dimen>
+    <dimen name="album_padding_left">8dp</dimen>
+    <dimen name="album_padding_right">8dp</dimen>
 
       <!-- configuration for album page in Landscape-->
-    <dimen name="album_slot_gap_land">3dp</dimen>
-    <dimen name="album_padding_top_land">3dp</dimen>
-    <dimen name="album_padding_bottom_land">3dp</dimen>
-    <dimen name="album_padding_left_land">3dp</dimen>
-    <dimen name="album_padding_right_land">3dp</dimen>
+    <dimen name="album_slot_gap_land">4dp</dimen>
+    <dimen name="album_padding_top_land">8dp</dimen>
+    <dimen name="album_padding_bottom_land">8dp</dimen>
+    <dimen name="album_padding_left_land">8dp</dimen>
+    <dimen name="album_padding_right_land">8dp</dimen>
 
     <dimen name="photo_view_video_icon_size">48dp</dimen>
 

@@ -386,6 +386,14 @@ public abstract class AbstractGalleryActivity extends AbstractPermissionActivity
         return lastPathSegment;
     }
 
+   public int getNavigationBarInset() {
+       return 0;
+   }
+
+   public int getContentBottomInset() {
+       return 0;
+   }
+
    public Toolbar getToolbar() {
        return mToolbar;
    }

@@ -37,11 +37,11 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.InputDevice;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -60,9 +60,8 @@ import com.android.gallery3d.data.MediaItem;
 import com.android.gallery3d.data.MediaSet;
 import com.android.gallery3d.data.Path;
 import com.android.gallery3d.picasasource.PicasaSource;
+import com.android.gallery3d.ui.PillNavigationView;
 import com.android.gallery3d.util.GalleryUtils;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Locale;
 
@@ -97,7 +96,8 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
     public static boolean mIsparentActivityFInishing;
     public Toolbar mToolbar;
 
-    private BottomNavigationView mBottomNavigation;
+    private PillNavigationView mBottomNavigation;
+    private int mNavigationBarInset;
     private RelativeLayout mGLParentLayout;
     private RelativeLayout.LayoutParams params;
 
@@ -178,31 +178,79 @@ public final class GalleryActivity extends AbstractGalleryActivity implements On
         mGLParentLayout = (RelativeLayout) findViewById(R.id.gl_parent_layout);
         params = (RelativeLayout.LayoutParams) mGLParentLayout.getLayoutParams();
 
-        mBottomNavigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
-        mBottomNavigation.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                getGLRoot().lockRenderThread();
-                final int itemId = item.getItemId();
-                if (itemId == R.id.action_timeline) {
-                    showScreen(0);
-                } else if (itemId == R.id.action_album) {
-                    showScreen(1);
-                } else if (itemId == R.id.action_videos) {
-                    showScreen(2);
-                }
-                getGLRoot().unlockRenderThread();
-                return true;
+        mBottomNavigation = (PillNavigationView) findViewById(R.id.bottom_navigation);
+        mBottomNavigation.setOnItemSelectedListener(itemId -> {
+            getGLRoot().lockRenderThread();
+            if (itemId == R.id.action_timeline) {
+                showScreen(0);
+            } else if (itemId == R.id.action_album) {
+                showScreen(1);
+            } else if (itemId == R.id.action_videos) {
+                showScreen(2);
             }
+            getGLRoot().unlockRenderThread();
+        });
+
+        getWindow().setDecorFitsSystemWindows(false);
+        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        getWindow().setNavigationBarContrastEnforced(false);
+        final View root = findViewById(R.id.drawerLayout);
+        final int pillMargin = getResources().getDimensionPixelSize(R.dimen.lunaris_pill_margin);
+        root.setOnApplyWindowInsetsListener((v, insets) -> {
+            v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
+                    insets.getSystemWindowInsetRight(), 0);
+            mNavigationBarInset = insets.getSystemWindowInsetBottom();
+            ViewGroup.MarginLayoutParams lp =
+                    (ViewGroup.MarginLayoutParams) mBottomNavigation.getLayoutParams();
+            lp.bottomMargin = mNavigationBarInset + pillMargin;
+            mBottomNavigation.setLayoutParams(lp);
+            requestContentLayout();
+            return WindowInsets.CONSUMED;
         });
     }
 
     public void toggleNavBar(boolean show) {
         if (show) {
-            mBottomNavigation.setVisibility(View.VISIBLE);
+            syncNavSelection();
+        }
+        if (mBottomNavigation.isPillShown() != show) {
+            mBottomNavigation.setPillShown(show);
+            requestContentLayout();
         } else {
-            mBottomNavigation.setVisibility(View.GONE);
+            mBottomNavigation.setPillShown(show);
+        }
+    }
+
+    @Override
+    public int getNavigationBarInset() {
+        return mNavigationBarInset;
+    }
+
+    @Override
+    public int getContentBottomInset() {
+        if (!mBottomNavigation.isPillShown()) {
+            return mNavigationBarInset;
+        }
+        return mNavigationBarInset + mBottomNavigation.getLayoutParams().height
+                + 2 * getResources().getDimensionPixelSize(R.dimen.lunaris_pill_margin);
+    }
+
+    private void requestContentLayout() {
+        if (getGLRoot() != null) {
+            getGLRoot().requestLayoutContentPane();
+        }
+    }
+
+    private void syncNavSelection() {
+        if (getStateManager().getStateCount() == 0) return;
+        ActivityState state = getStateManager().getTopState();
+        if (state instanceof TimeLinePage) {
+            mBottomNavigation.setSelectedItemId(R.id.action_timeline);
+        } else if (state instanceof AlbumSetPage) {
+            mBottomNavigation.setSelectedItemId(R.id.action_album);
+        } else if (state instanceof AlbumPage && state.getData() != null
+                && state.getData().getBoolean(AlbumPage.KEY_IS_VIDEOS_SCREEN)) {
+            mBottomNavigation.setSelectedItemId(R.id.action_videos);
         }
     }
 

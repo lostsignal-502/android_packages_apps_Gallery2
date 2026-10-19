@@ -192,6 +192,7 @@ public class TimeLinePage extends ActivityState implements
 
             // Set the mSlotView as a reference point to the open animation
             mOpenCenter.setReferencePosition(0, slotViewTop);
+            mSlotView.setContentBottomInset(mActivity.getContentBottomInset());
             mSlotView.layout(padding, slotViewTop, slotViewRight, slotViewBottom);
             GalleryUtils.setViewPointMatrix(mMatrix,
                     (right - left) / 2, (bottom - top) / 2, -mUserDistance);

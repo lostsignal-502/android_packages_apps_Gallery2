@@ -1561,6 +1561,7 @@ public abstract class PhotoPage extends ActivityState implements
     @Override
     protected void onResume() {
         super.onResume();
+        mActionBar.setBackGroundTransparent();
         //set full screen to hide the status bar
         showFullScreen(true);
 
@@ -1605,6 +1606,7 @@ public abstract class PhotoPage extends ActivityState implements
 
     @Override
     protected void onDestroy() {
+        mActionBar.setBackGroundDefault();
         if (mAppBridge != null) {
             mAppBridge.setServer(null);
             mScreenNailItem.setScreenNail(null);

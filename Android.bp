@@ -12,6 +12,7 @@ android_app {
         "androidx.heifwriter_heifwriter",
         "androidx.legacy_legacy-support-core-ui",
         "androidx.core_core",
+        "androidx.dynamicanimation_dynamicanimation",
         "androidx.legacy_legacy-support-v13",
         "com.android.gallery3d.common2",
         "xmp_toolkit",
